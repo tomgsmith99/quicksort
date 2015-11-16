@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Tom's Quicksort</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="binaryTree.js" type ="text/javascript"></script>
+
+        <script src="jquery-2.1.4.min.js" type ="text/javascript"></script>
+        <script src="jquery.btree.js" type = "text/javascript"></script>
+
+        <script src="wz_jsgraphics.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var myTree;
+            $(function(){
+        	// myTree = $("#treeDiv").btree()[0];
+                myTree = $("#auditorium").btree({horizontal: ""})[0];
+
+            });
+        </script>
+        
+        <script type ="text/javascript">
+
+            window.onload = function () {
+                
+                var leaf = new Leaf(6);
+                
+                leaf.setData("8");
+                
+                console.log("the leaf has been created: " + leaf.index);
+            };
+        </script>
+
+    </head>
+    <body>
+
+    </body>
+</html>
