@@ -22,9 +22,8 @@
         
         <script type ="text/javascript">
             var qsCount = 0;
-            
+
             var listOfArrays = [];
-            var z = 0;
 
             var binaryTree = new BinaryTree();
 
@@ -39,7 +38,6 @@
                 $("#quicksort").append("<p>The value of left is: " + left);
                 $("#quicksort").append("<p>The value of right is: " + right);
 
-                // if (qsCount > 5) {return;}
                 if (left < right) {
                     pivot = partition(A, left, right);
                     $("#quicksort").append("<p>pivot is: " + pivot + "<p>");
@@ -158,33 +156,42 @@
 
 
             };
-            
-            // var binaryTree = [];
 
             function buildTree() {
                 
-                j = listOfArrays.length - 1;
+                // add all of the array and singleton 
+                // elements to the binaryTree object
+                listOfArrays.forEach(function(item) {
+                    var leaf = new Leaf();
+                    leaf.setData(item);
+                    binaryTree.addLeaf(leaf);
+                });
                 
-                for (i = listOfArrays.length - 1; i >= 0; i--) {
+                // now find each leaf's parent and children
+                leaves = binaryTree.getLeaves();
+/*                
+                leaves.forEach(function(leaf) {
+                    nextLeaf = 
+                    else 
+                });
+                
+                j = listOfArrays.length - 1;
+*/                
+                for (i = leaves.length - 1; i > 0; i--) {
                     console.log("the value is: " + listOfArrays[i]);
 
-                    var leaf = new Leaf();
-                    leaf.setIndex(i);
-                    leaf.setData(listOfArrays[i]);
-
-                    binaryTree.addLeaf(leaf);
-
                     j = i - 1;
+                    
+                    leaf = leaves[i];
 
-                    while (leaf.hasParent() === false && z < 100) {
-                        var child = listOfArrays[i];
-                        var potParent = listOfArrays[j];
+                    while (leaf.hasParent() === false && z < 200) {
+                        var child = leaf.getData();
+                        pleaf = leaves[j];
+                        var potParent = pleaf.getData();
                         
                         z++;
                         
                         if (Array.isArray(potParent)) {
-                            // continue;
-                            console.log("potential parent: " + potParent);
                             console.log("looking for " + child + " in " + potParent);
 
                             if (typeof child === "number") {
@@ -192,9 +199,10 @@
                                     leaf.setParent(j);
                                     console.log(child + " is a member of " + potParent);
                                     console.log("the value of hasParent is: " + leaf.hasParent());
-                                    pleaf = binaryTree.getLeaf(j);
-                                    console.log("the data in the parent leaf is: ");
-                                    console.log(pleaf.getData());
+                                    if (pleaf.hasLeftChild()) {
+                                        pleaf.setChild("right", i);
+                                    }
+                                    else { pleaf.setChild("left", i); }
                                 }
                                 else { j = j - 1; }
                             }

@@ -3,7 +3,8 @@ var BinaryTree = function() {
 };
 
 BinaryTree.prototype.addLeaf = function(leaf) {
-    this.leaves.push(leaf);
+    this.total = this.leaves.push(leaf);
+    leaf.setIndex(this.total - 1);
 };
 
 BinaryTree.prototype.setData = function(array) {
@@ -16,25 +17,39 @@ BinaryTree.prototype.addChildToParent = function(leaf, pIndex) {
 
 BinaryTree.prototype.show = function() {
     this.leaves.forEach(function(leaf) {
+        console.log("-----------------------");
+
         console.log("my index is: " + leaf.index);
-        console.log("the data is: " + leaf.data);
-        console.log("the parent index is: " + leaf.parent);
-        console.log("the left child is: " + leaf.leftchild);
-        console.log("the right child is: " + leaf.rightchild);
+        console.log("my data is: " + leaf.data);
+        console.log("my parent index is: " + leaf.parent);
+        if (leaf.parent !== null) {
+            pleaf = this.leaves[leaf.parent];
+        }
+        console.log("my parent's data is: " + pleaf.data);
+        if (leaf.hasChildren()) {
+            if (leaf.hasLeftChild()) {
+                console.log("my left child's index is: " + leaf.leftChild);
+            }
+            if (leaf.hasRightChild()) {
+                console.log("my right child is: " + leaf.rightChild);
+            }
+        }
+        else { console.log("I have no children."); }
     });
 };
 BinaryTree.prototype.getLeaf = function(index) {
-    this.leaves.forEach(function(leaf) {
-        if (leaf.index === index) {
-            return leaf;
-        }
-    });
+    return this.leaves[index];
+};
+
+BinaryTree.prototype.getLeaves = function() {
+    return this.leaves;
 };
 
 var Leaf = function () {
     this.parent = null;
     this.data = null;
-    console.log("leaf has been created.");
+    this.leftChild = null;
+    this.rightChild = null;
 };
 Leaf.prototype.setIndex = function(index) {
     this.index = index;
@@ -52,4 +67,28 @@ Leaf.prototype.setData = function(data) {
 Leaf.prototype.getData = function() {
     if (this.data === null) { return "no data set yet"; }
     else { return this.data; }
+};
+Leaf.prototype.hasChildren = function() {
+    if (this.leftChild === null && this.rightChild === null) {
+        return false;
+    }
+    else { return true; }
+};
+Leaf.prototype.hasLeftChild = function() {
+    if (this.leftChild === null) {
+        return false;
+    }
+    else { return true; }
+};
+Leaf.prototype.hasRightChild = function() {
+    if (this.rightChild === null) {
+        return false;
+    }
+    else { return true; }
+};
+Leaf.prototype.setChild = function (pos, index) {
+    if (pos === "right") {
+        this.rightChild = index;
+    }
+    else { this.leftChild = index; }
 };
