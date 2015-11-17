@@ -31,100 +31,91 @@
                 var pivot;
                 
                 qsCount = qsCount + 1;
-                $("#quicksort").append("<p>----------QSBEGIN----------.");
-
-                $("#quicksort").append("<p>Starting the qs function.");
-                $("#quicksort").append("<p>Iteration number: " + qsCount);
-                $("#quicksort").append("<p>The value of left is: " + left);
-                $("#quicksort").append("<p>The value of right is: " + right);
+                console.log("----------QSBEGIN----------");
+                console.log("Starting the qs function.");
+                console.log("Iteration number: " + qsCount);
+                console.log("The left index is: " + left);
+                console.log("The right index is: " + right);
+                console.log("Checking to see if left index < right index:");
 
                 if (left < right) {
+                    console.log("left is < right.");
+                    console.log("starting the partition function.");
                     pivot = partition(A, left, right);
-                    $("#quicksort").append("<p>pivot is: " + pivot + "<p>");
+                    console.log("partition function complete.");
+                    console.log("result of partition function - pivot index is: " + pivot);
                     quickSort (A, left, pivot);
-                    // printArray(A[left:pivot])
                     quickSort (A, (pivot+1), right);
                 }
                 else if (left === right) { // Note: this clause is not needed for qs!
                     listOfArrays.push(A[left]);
-                    // console.log("Singleton array is: " + A[left]);
                 }
-
             }
             
             function partition(A, left, right){
                 var pivot = A[left];
                 var i = left;
-
-                // $("#quicksort").append("Starting partition: " + A.join(' '));
-                $("#quicksort").append("<p>--------PBEGIN------------");
+                var output = "";
                 
-                $("#quicksort").append("<p>");
-                for (k = left; k<=right; k++) {
-                    $("#quicksort").append(A[k] + " ");
-                }
+                console.log("--------PBEGIN------------");
+                console.log("This is the partition we are going to work on:");
+
+                for (k = left; k<=right; k++) { output = output + A[k] + " "; }
+                console.log(output);
                 
                 for (j = left; j <= right; j++){
-                    // $("#quicksort").append("<p>The pivot is: " + pivot);
-                    $("#quicksort").append("<p>The index of j is: " + j);
-                    $("#quicksort").append("<p>The index of i is: " + i);
-                    
-                    // $("#quicksort").append(A.join(' '));
-                    
-                    $("#quicksort").append("<p>Comparing A[j] (" + A[j] + ") to the pivot value: " + pivot + "<p>");
+                    console.log("The index of j is: " + j);
+                    console.log("The index of i is: " + i);
+                    console.log("Comparing A[j] (" + A[j] + ") to the pivot value: " + pivot);
+
                     if (A[j] <= pivot) {
-                        $("#quicksort").append("<p>A[j] is less than or equal to the pivot, so we are going to swap A[j] " + A[j] + " with A[i]: " + A[i]);
+                        console.log("A[j] is less than or equal to the pivot, so we are going to swap A[j] " + A[j] + " with A[i]: " + A[i]);
+
                         temp = A[j];
                         A[j] = A[i];
                         A[i] = temp;
-                        // var j = i;
-                        // j is the smaller value that needs to be moved to the lrft
-                        $("#quicksort").append("<p>");
-                        for (k = left; k<=right; k++) {
-                            $("#quicksort").append(A[k] + " ");
-                        }
+
+                        output = "";
+                        for (k = left; k<=right; k++) { output = output + A[k] + " "; }
+                        console.log(output);
                         
-                        /**
-                        $("#quicksort").append("<p>the j value is now " + A[j]);
-                        $("#quicksort").append("<p>the i value is now " + A[i]);
-                        $("#quicksort").append("<p>the index of the pivot is now: " + A.indexOf(pivot));
-*/
                         i = i + 1;
-
                     }
-                    else { $("#quicksort").append("<p>A[j] is greater than the pivot value, so no values were swapped.");}
-                    $("#quicksort").append("<p>i is now: " + i);
+                    else { console.log("A[j] is greater than the pivot value, so no values were swapped."); }
+                    
+                    console.log("i is now: " + i);
 
-                    $("#quicksort").append("<p>");
-                    for (k = left; k<=right; k++) {
-                        $("#quicksort").append(A[k] + " ");
-                    }
-                    $("#quicksort").append("<p>---------</p>");
-                    // $("#quicksort").append(A.join(' '));
+                    output = "";
+                    for (k = left; k<=right; k++) { output = output + A[k] + " "; }
+                    console.log(output);
+                    
+                    console.log("---------");
                 }
                 
-                $("#quicksort").append("<p>For loop complete. Swapping the A[i-1] value " + A[i-1] + " with the pivot " + A[left]);
+                console.log("For loop complete. Swapping the A[i-1] value " + A[i-1] + " with the pivot " + A[left]);
 
                 temp = A[i -1];
                 A[i - 1] = A[left];
                 A[left] = temp;
                 
-                $("#quicksort").append("<p>This partition is now: ");
-                
-                $("#quicksort").append("<p>");
-                
-                thisArray = [];
+                console.log("This partition is now:");
 
+                output = "";
+                for (k = left; k<=right; k++) { output = output + A[k] + " "; }
+                console.log(output);
+                
+                // Stash the array in the binary tree
+                // this procedure is not necessary for quicksort
+                thisArray = [];
                 for (k = left; k <= right; k++) {
-                    $("#quicksort").append(A[k] + " ");
                     thisArray.push(A[k]);
                 }
                 
                 listOfArrays.push(thisArray);
-
-                $("#quicksort").append("<p>The full array is now: " + A.join(' '));
-
-                $("#quicksort").append("<p>The length of the list of Arrays is now: " + listOfArrays.length);
+                
+                console.log("The full array is now: " + A.join(' '));
+                
+                console.log("The length of the list of Arrays is now: " + listOfArrays.length);
 
                 retVal = i - 1;
                 return retVal;
@@ -135,18 +126,15 @@
 
                 quickSort(A, 0, (A.length - 1));
                 
-                $("#quicksort").append("<p>COMPLETE! The full array is now: " + A.join(' '));
-
-                $("#quicksort").append("<p>The list of Arrays is: ");
+                console.log("COMPLETE! The full array is now: " + A.join(' '));
                 
+                console.log("The list of Arrays is: ");
+
                 listOfArrays.forEach(function(anArray) {
-                    // console.log("trying to show an array");
                     console.log(anArray);
                 });
 
-                $("#quicksort").append("<p>The length of the list of Arrays is now: " + listOfArrays.length);
-                
-                // var leaf = new Leaf(0);
+                console.log("The length of the list of Arrays is now: " + listOfArrays.length);
 
                 buildTree();
                 
@@ -184,12 +172,10 @@
                     
                     leaf = leaves[i];
 
-                    while (leaf.hasParent() === false && z < 200) {
+                    while (leaf.hasParent() === false) {
                         var child = leaf.getData();
                         pleaf = leaves[j];
                         var potParent = pleaf.getData();
-                        
-                        z++;
                         
                         if (Array.isArray(potParent)) {
                             console.log("looking for " + child + " in " + potParent);
