@@ -137,6 +137,8 @@
                 console.log('----------------------------');
                 
                 binaryTree.show();
+                
+                displayTree();
 
             };
 
@@ -194,6 +196,18 @@
                         }
                     }
                 }
+            }
+            
+            function displayTree(){
+                var output = "";
+                leaves = binaryTree.getLeaves();
+                leaves.forEach(function(leaf) {
+                    output = output + leaf.getData().toString();
+                    $("#tomQS").append("<div>" + leaf.getData().toString() + "</div");
+
+                });
+                console.log("here are the nodes: ");
+                console.log(output);
             }
 
    </script>
@@ -293,5 +307,7 @@ quickSort(A, 0, (len(A) - 1))
 		<span>Box15</span>
 	</div>
         </div>
+        
+        <div id="tomQS"></div>
     </body>
 </html>
