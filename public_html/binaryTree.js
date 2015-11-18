@@ -7,6 +7,10 @@ BinaryTree.prototype.addLeaf = function(leaf) {
     leaf.setIndex(this.total - 1);
 };
 
+BinaryTree.prototype.getTotal = function() {
+    return this.leaves.length;
+};
+
 BinaryTree.prototype.setData = function(array) {
     this.data = array;
 };
@@ -37,6 +41,12 @@ BinaryTree.prototype.show = function() {
         else { console.log("I have no children."); }
     });
 };
+BinaryTree.prototype.showValues = function() {
+    this.leaves.forEach(function(leaf) {
+        console.log("my data is: " + leaf.data);
+    });
+};
+
 BinaryTree.prototype.getLeaf = function(index) {
     return this.leaves[index];
 };

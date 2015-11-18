@@ -14,16 +14,12 @@
         <script type="text/javascript">
             var myTree;
             $(function(){
-        	// myTree = $("#treeDiv").btree()[0];
                 myTree = $("#auditorium").btree({horizontal: ""})[0];
-
             });
         </script>
         
         <script type ="text/javascript">
             var qsCount = 0;
-
-            var listOfArrays = [];
 
             var binaryTree = new BinaryTree();
 
@@ -48,7 +44,10 @@
                     quickSort (A, (pivot+1), right);
                 }
                 else if (left === right) { // Note: this clause is not needed for qs!
-                    listOfArrays.push(A[left]);
+                    console.log("Nope. This partition is a singleton: " + A[left]);
+                    var leaf = new Leaf();
+                    leaf.setData(A[left]);
+                    binaryTree.addLeaf(leaf);
                 }
             }
             
@@ -64,9 +63,11 @@
                 console.log(output);
                 
                 for (j = left; j <= right; j++){
+                    printSubArray(A, left, right);
+
                     console.log("The index of j is: " + j);
                     console.log("The index of i is: " + i);
-                    console.log("Comparing A[j] (" + A[j] + ") to the pivot value: " + pivot);
+                    console.log("Comparing A[" + j + "] (" + A[j] + ") to the pivot value: " + pivot);
 
                     if (A[j] <= pivot) {
                         console.log("A[j] is less than or equal to the pivot, so we are going to swap A[j] " + A[j] + " with A[i]: " + A[i]);
@@ -75,21 +76,14 @@
                         A[j] = A[i];
                         A[i] = temp;
 
-                        output = "";
-                        for (k = left; k<=right; k++) { output = output + A[k] + " "; }
-                        console.log(output);
-                        
+                        printSubArray(A, left, right);
+
                         i = i + 1;
                     }
                     else { console.log("A[j] is greater than the pivot value, so no values were swapped."); }
                     
                     console.log("i is now: " + i);
-
-                    output = "";
-                    for (k = left; k<=right; k++) { output = output + A[k] + " "; }
-                    console.log(output);
-                    
-                    console.log("---------");
+                    console.log("-----------------");
                 }
                 
                 console.log("For loop complete. Swapping the A[i-1] value " + A[i-1] + " with the pivot " + A[left]);
@@ -100,25 +94,29 @@
                 
                 console.log("This partition is now:");
 
-                output = "";
-                for (k = left; k<=right; k++) { output = output + A[k] + " "; }
-                console.log(output);
-                
-                // Stash the array in the binary tree
+                printSubArray(A, left, right);
+
+                // Store the subarray in the binary tree
                 // this procedure is not necessary for quicksort
                 thisArray = [];
-                for (k = left; k <= right; k++) {
-                    thisArray.push(A[k]);
-                }
+                for (k = left; k <= right; k++) { thisArray.push(A[k]); }
                 
-                listOfArrays.push(thisArray);
-                
+                var leaf = new Leaf();
+                leaf.setData(thisArray);
+                binaryTree.addLeaf(leaf);
+
                 console.log("The full array is now: " + A.join(' '));
                 
-                console.log("The length of the list of Arrays is now: " + listOfArrays.length);
+                console.log("The length of the list of arrays is now: " + binaryTree.getTotal());
 
                 retVal = i - 1;
                 return retVal;
+            }
+            
+            function printSubArray(A, left, right) {
+                var output = "";
+                for (k = left; k<=right; k++) { output = output + A[k] + " "; }
+                console.log(output);
             }
             
             window.onload = function () {
@@ -130,11 +128,9 @@
                 
                 console.log("The list of Arrays is: ");
 
-                listOfArrays.forEach(function(anArray) {
-                    console.log(anArray);
-                });
+                binaryTree.showValues();
 
-                console.log("The length of the list of Arrays is now: " + listOfArrays.length);
+                console.log("The length of the list of Arrays is now: " + binaryTree.getTotal());
 
                 buildTree();
                 
@@ -142,35 +138,20 @@
                 
                 binaryTree.show();
 
-
             };
 
             function buildTree() {
-                
-                // add all of the array and singleton 
-                // elements to the binaryTree object
-                listOfArrays.forEach(function(item) {
-                    var leaf = new Leaf();
-                    leaf.setData(item);
-                    binaryTree.addLeaf(leaf);
-                });
-                
-                // now find each leaf's parent and children
+
+                // find each leaf's parent and children
                 leaves = binaryTree.getLeaves();
-/*                
-                leaves.forEach(function(leaf) {
-                    nextLeaf = 
-                    else 
-                });
-                
-                j = listOfArrays.length - 1;
-*/                
+
                 for (i = leaves.length - 1; i > 0; i--) {
-                    console.log("the value is: " + listOfArrays[i]);
 
                     j = i - 1;
                     
                     leaf = leaves[i];
+                    
+                    console.log("the value is: " + leaf.getData());
 
                     while (leaf.hasParent() === false) {
                         var child = leaf.getData();
@@ -213,17 +194,8 @@
                         }
                     }
                 }
-                
             }
-            
-/*
-            function showLeaves() {
-                binaryTree.forEach(function(leaf) {
-                    console.log("the index of the leaf is: " + leaf.index);
-                    console.log("the parent of the leaf is: " + leaf.parent);
-                });
-            }
-*/
+
    </script>
 <!--            /*
 
