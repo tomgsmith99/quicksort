@@ -55,11 +55,24 @@ BinaryTree.prototype.getLeaves = function() {
     return this.leaves;
 };
 
+BinaryTree.prototype.calculateLeafPositions = function() {
+    console.log("CALCULATE");
+    this.leaves.forEach(function(leaf) {
+        if (leaf.index === 0) { leaf.depth = 0; }
+        else {
+            pleaf = this.leaves[leaf.parent];
+            leaf.depth = pleaf.depth + 1;
+        }
+        console.log("in the calc function. Leaf is: " + leaf.getData() + " Depth is: " + leaf.depth);
+    });
+};
+
 var Leaf = function () {
     this.parent = null;
     this.data = null;
     this.leftChild = null;
     this.rightChild = null;
+    this.depth = null;
 };
 Leaf.prototype.setIndex = function(index) {
     this.index = index;

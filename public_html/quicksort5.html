@@ -6,6 +6,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
+        <link rel ="stylesheet" type ="text/css" href ="tsQuicksort.css">
+        
         <script src ='binaryTree.js' type ='text/javascript'></script>
         <script src="jquery-2.1.4.min.js" type ="text/javascript"></script>
         <script src="jquery.btree.js" type = "text/javascript"></script>
@@ -139,7 +141,8 @@
                 binaryTree.show();
                 
                 displayTree();
-
+                
+                binaryTree.calculateLeafPositions();
             };
 
             function buildTree() {
@@ -198,17 +201,33 @@
                 }
             }
             
+
             function displayTree(){
                 var output = "";
+                depth = 0;
                 leaves = binaryTree.getLeaves();
                 leaves.forEach(function(leaf) {
                     output = output + leaf.getData().toString();
-                    $("#tomQS").append("<div>" + leaf.getData().toString() + "</div");
 
+                    $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
+                    
+                    console.log("leaf data is: " + leaf.getData());
+                    console.log("leaf depth is: " + leaf.depth);
+                    console.log("--------");
                 });
-                console.log("here are the nodes: ");
-                console.log(output);
             }
+            
+
+//            
+//            function showLeafAndChildren(leaf) {
+//                $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
+//                if (leaf.hasChildren())
+//                    if (leaf.hasLeftChild()) {
+//                            $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
+//
+//                        }
+//
+//            }
 
    </script>
 <!--            /*
