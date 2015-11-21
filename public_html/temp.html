@@ -24,11 +24,28 @@
 
             window.onload = function () {
                 
-                var leaf = new Leaf(6);
+                var parentArray = [5,6,8,9];
                 
-                leaf.setData("8");
+                array1 = [5,6,8];
+                array2 = [5,6,10];
+                array3 = 5;
+                function isInParent(element, index, array) {
+                    return (parentArray.indexOf(element) !== -1);
+                }
                 
-                console.log("the leaf has been created: " + leaf.index);
+                
+                console.log("is array1 a subset of parentArray? " + array1.every(isInParent));
+                console.log("is array2 a subset of parentArray? " + array2.every(isInParent));
+
+                output1 = array1.every(elem => parentArray.indexOf(elem) !== -1);
+                output2 = array2.every(elem => parentArray.indexOf(elem) !== -1);
+                output3 = array3.every(elem => parentArray.indexOf(elem) !== -1);
+
+                console.log("is array1 a subset of parentArray? " + output1);
+                console.log("is array2 a subset of parentArray? " + output2);
+                console.log("is array3 a subset of parentArray? " + output3);
+
+
             };
         </script>
 

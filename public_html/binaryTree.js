@@ -7,16 +7,20 @@ BinaryTree.prototype.addLeaf = function(leaf) {
     leaf.setIndex(this.total - 1);
 };
 
+BinaryTree.prototype.associate = function(parent, child) {
+    child.setParent(parent.index);
+    parent.setChild(child.index);
+    
+    console.log(child.getData() + " is a member of " + parent.getData());
+    console.log("---------------");
+};
+
 BinaryTree.prototype.getTotal = function() {
     return this.leaves.length;
 };
 
 BinaryTree.prototype.setData = function(array) {
     this.data = array;
-};
-
-BinaryTree.prototype.addChildToParent = function(leaf, pIndex) {
-    pLeaf = new Leaf(pIndex);
 };
 
 BinaryTree.prototype.show = function() {
@@ -27,15 +31,15 @@ BinaryTree.prototype.show = function() {
         console.log("my data is: " + leaf.data);
         console.log("my parent index is: " + leaf.parent);
         if (leaf.parent !== null) {
-            pleaf = this.leaves[leaf.parent];
+            var pleaf = this.leaves[leaf.parent];
+             console.log("my parent's data is: " + pleaf.data);
         }
-        console.log("my parent's data is: " + pleaf.data);
         if (leaf.hasChildren()) {
             if (leaf.hasLeftChild()) {
                 console.log("my left child's index is: " + leaf.leftChild);
             }
             if (leaf.hasRightChild()) {
-                console.log("my right child is: " + leaf.rightChild);
+                console.log("my right child's index is: " + leaf.rightChild);
             }
         }
         else { console.log("I have no children."); }
@@ -58,9 +62,12 @@ BinaryTree.prototype.getLeaves = function() {
 BinaryTree.prototype.calculateLeafPositions = function() {
     console.log("CALCULATE");
     this.leaves.forEach(function(leaf) {
-        if (leaf.index === 0) { leaf.depth = 0; }
+        if (leaf.index === 0) {
+            leaf.depth = 0;
+            leaf.hpos = 0;
+        }
         else {
-            pleaf = this.leaves[leaf.parent];
+            var pleaf = this.leaves[leaf.parent];
             leaf.depth = pleaf.depth + 1;
         }
         console.log("in the calc function. Leaf is: " + leaf.getData() + " Depth is: " + leaf.depth);
@@ -73,6 +80,7 @@ var Leaf = function () {
     this.leftChild = null;
     this.rightChild = null;
     this.depth = null;
+    this.binPos = null; // binary position relative to parent (left || right)
 };
 Leaf.prototype.setIndex = function(index) {
     this.index = index;
@@ -109,8 +117,9 @@ Leaf.prototype.hasRightChild = function() {
     }
     else { return true; }
 };
-Leaf.prototype.setChild = function (pos, index) {
-    if (pos === "right") {
+
+Leaf.prototype.setChild = function (index) {
+    if (this.hasLeftChild()) {
         this.rightChild = index;
     }
     else { this.leftChild = index; }

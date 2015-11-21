@@ -128,21 +128,38 @@
                 
                 console.log("COMPLETE! The full array is now: " + A.join(' '));
                 
+                console.log("------------------------------------------");
+                console.log("------------------------------------------");
+                console.log("------------------------------------------");
+
                 console.log("The list of Arrays is: ");
 
                 binaryTree.showValues();
 
-                console.log("The length of the list of Arrays is now: " + binaryTree.getTotal());
+                console.log("The length of the list of Arrays is: " + binaryTree.getTotal());
 
-                buildTree();
+                console.log("-----STARTING THE buildTree() function------");
                 
+                buildTree();
+
+                console.log('----------------------------');
+
+                console.log("------STARTING THE calculateLeafPositions() function ------");
+
+                binaryTree.calculateLeafPositions();
+
                 console.log('----------------------------');
                 
+                console.log("--------STARTING THE show() function -------");
+
                 binaryTree.show();
+                
+                console.log("---------------------");
+                
+                console.log("-----STARTING THE displayTree() function --------");
                 
                 displayTree();
                 
-                binaryTree.calculateLeafPositions();
             };
 
             function buildTree() {
@@ -156,51 +173,37 @@
                     
                     leaf = leaves[i];
                     
-                    console.log("the value is: " + leaf.getData());
+                    console.log("the child value is: " + leaf.getData());
 
-                    while (leaf.hasParent() === false) {
+                    z = 0;
+                    
+                    while (leaf.hasParent() === false && z < 10000) {
+                        z++;
                         var child = leaf.getData();
                         pleaf = leaves[j];
                         var potParent = pleaf.getData();
                         
                         if (Array.isArray(potParent)) {
                             console.log("looking for " + child + " in " + potParent);
-
                             if (typeof child === "number") {
                                 if (potParent.indexOf(child) !== -1) {
-                                    leaf.setParent(j);
-                                    console.log(child + " is a member of " + potParent);
-                                    console.log("the value of hasParent is: " + leaf.hasParent());
-                                    if (pleaf.hasLeftChild()) {
-                                        pleaf.setChild("right", i);
-                                    }
-                                    else { pleaf.setChild("left", i); }
+                                    binaryTree.associate(pleaf, leaf);
                                 }
                                 else { j = j - 1; }
                             }
-                            else {
-                                isSubset = true;
-                                child.forEach(function(item) {
-                                    if (potParent.indexOf(item) === -1) {
-                                        isSubset = false;
-                                    }
-                                });
-                                
-                                if (isSubset) {
-                                    leaf.setParent(j);
-                                    console.log(child + " is a member of " + potParent);
+                            else { // typeof child === "array"
+                                var item;
+                                if (child.every(item => potParent.indexOf(item) !== -1)) {
+                                    binaryTree.associate(pleaf, leaf);
                                     break;
                                 }
                                 else { j = j - 1; }
                             }
                         }
-                        else {
-                            j = j - 1;
-                        }
+                        else { j = j - 1; }
                     }
                 }
             }
-            
 
             function displayTree(){
                 var output = "";
@@ -216,20 +219,8 @@
                     console.log("--------");
                 });
             }
-            
 
-//            
-//            function showLeafAndChildren(leaf) {
-//                $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
-//                if (leaf.hasChildren())
-//                    if (leaf.hasLeftChild()) {
-//                            $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
-//
-//                        }
-//
-//            }
-
-   </script>
+        </script>
 <!--            /*
 
             def quickSort(A, left, right): # Accept the array and arbitrary values for left
