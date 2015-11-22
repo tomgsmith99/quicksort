@@ -158,9 +158,15 @@
                 
                 console.log("---------------------");
                 
+                console.log("-------STARTING THE flatten() function-----");
+                
+                binaryTree.flatten();
+                
                 console.log("-----STARTING THE displayTree() function --------");
                 
                 displayTree();
+                
+
                 
             };
 
@@ -217,7 +223,8 @@
                     
                     console.log("leaf data is: " + leaf.getData());
                     console.log("leaf depth is: " + leaf.depth);
-                    console.log("leaf width is: " + leaf.width);
+                    console.log("leaf binPos is: " + leaf.binPos);
+                    console.log("leaf hpos is: " + leaf.hpos);
                     console.log("--------");
                 });
             }
