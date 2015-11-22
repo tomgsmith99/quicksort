@@ -151,23 +151,21 @@
                 binaryTree.calculateLeafPositions();
 
                 console.log('----------------------------');
+
+                console.log("-------STARTING THE flatten() function-----");
+                
+                binaryTree.flatten();
                 
                 console.log("--------STARTING THE show() function -------");
 
                 binaryTree.show();
                 
-                console.log("---------------------");
-                
-                console.log("-------STARTING THE flatten() function-----");
-                
-                binaryTree.flatten();
-                
+                console.log('----------------------------');
+
                 console.log("-----STARTING THE displayTree() function --------");
                 
                 displayTree();
-                
 
-                
             };
 
             function buildTree() {
@@ -220,12 +218,7 @@
                     output = output + leaf.getData().toString();
 
                     $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
-                    
-                    console.log("leaf data is: " + leaf.getData());
-                    console.log("leaf depth is: " + leaf.depth);
-                    console.log("leaf binPos is: " + leaf.binPos);
-                    console.log("leaf hpos is: " + leaf.hpos);
-                    console.log("--------");
+   
                 });
             }
 
