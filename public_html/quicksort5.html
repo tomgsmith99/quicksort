@@ -126,7 +126,9 @@
 
                 quickSort(A, 0, (A.length - 1));
                 
-                console.log("COMPLETE! The full array is now: " + A.join(' '));
+                binaryTree.sortedInts = A;
+                
+                console.log("COMPLETE! The full array is now: " + binaryTree.sortedInts);
                 
                 console.log("------------------------------------------");
                 console.log("------------------------------------------");
@@ -207,7 +209,6 @@
 
             function displayTree(){
                 var output = "";
-                depth = 0;
                 leaves = binaryTree.getLeaves();
                 leaves.forEach(function(leaf) {
                     output = output + leaf.getData().toString();
@@ -216,6 +217,7 @@
                     
                     console.log("leaf data is: " + leaf.getData());
                     console.log("leaf depth is: " + leaf.depth);
+                    console.log("leaf width is: " + leaf.width);
                     console.log("--------");
                 });
             }
