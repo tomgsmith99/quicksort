@@ -5,6 +5,48 @@ var BinaryTree = function() {
                             // in the tree
 };
 
+BinaryTree.prototype.build = function() {
+    // find each leaf's parent and children
+    leaves = this.leaves;
+
+    for (i = leaves.length - 1; i > 0; i--) {
+
+        j = i - 1;
+
+        leaf = leaves[i];
+
+        console.log("the child value is: " + leaf.getData());
+
+        z = 0;
+
+        while (leaf.hasParent() === false && z < 10000) {
+            z++;
+            var child = leaf.getData();
+            pleaf = leaves[j];
+            var potParent = pleaf.getData();
+
+            if (Array.isArray(potParent)) {
+                console.log("looking for " + child + " in " + potParent);
+                if (typeof child === "number") {
+                    if (potParent.indexOf(child) !== -1) {
+                        this.associate(pleaf, leaf);
+                    }
+                    else { j = j - 1; }
+                }
+                else { // typeof child === "array"
+                    var item;
+                    if (child.every(item => potParent.indexOf(item) !== -1)) {
+                        this.associate(pleaf, leaf);
+                        break;
+                    }
+                    else { j = j - 1; }
+                }
+            }
+            else { j = j - 1; }
+        }
+    }
+};
+
 BinaryTree.prototype.addLeaf = function(leaf) {
     this.total = this.leaves.push(leaf);
     leaf.setIndex(this.total - 1);
