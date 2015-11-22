@@ -51,6 +51,7 @@
                     leaf.setData(A[left]);
                     binaryTree.addLeaf(leaf);
                 }
+                else { console.log("right > left, so we are done!"); } // also unnecessary
             }
             
             function partition(A, left, right){
@@ -129,91 +130,23 @@
                 binaryTree.sortedInts = A;
                 
                 console.log("COMPLETE! The full array is now: " + binaryTree.sortedInts);
-                
-                console.log("------------------------------------------");
-                console.log("------------------------------------------");
-                console.log("------------------------------------------");
-
-                console.log("The list of Arrays is: ");
 
                 binaryTree.showValues();
 
-                console.log("The length of the list of Arrays is: " + binaryTree.getTotal());
-
-                console.log("-----STARTING THE buildTree() function------");
-                
                 binaryTree.build();
-                
-        // buildTree();
-
-                console.log('----------------------------');
-
-                console.log("------STARTING THE calculateLeafPositions() function ------");
 
                 binaryTree.calculateLeafPositions();
 
-                console.log('----------------------------');
-
-                console.log("-------STARTING THE flatten() function-----");
-                
                 binaryTree.flatten();
-                
-                console.log("--------STARTING THE show() function -------");
 
                 binaryTree.show();
-                
-                console.log('----------------------------');
 
-                console.log("-----STARTING THE displayTree() function --------");
-                
                 displayTree();
-
             };
 
-            function buildTree() {
-
-                // find each leaf's parent and children
-                leaves = binaryTree.getLeaves();
-
-                for (i = leaves.length - 1; i > 0; i--) {
-
-                    j = i - 1;
-                    
-                    leaf = leaves[i];
-                    
-                    console.log("the child value is: " + leaf.getData());
-
-                    z = 0;
-                    
-                    while (leaf.hasParent() === false && z < 10000) {
-                        z++;
-                        var child = leaf.getData();
-                        pleaf = leaves[j];
-                        var potParent = pleaf.getData();
-                        
-                        if (Array.isArray(potParent)) {
-                            console.log("looking for " + child + " in " + potParent);
-                            if (typeof child === "number") {
-                                if (potParent.indexOf(child) !== -1) {
-                                    binaryTree.associate(pleaf, leaf);
-                                }
-                                else { j = j - 1; }
-                            }
-                            else { // typeof child === "array"
-                                var item;
-                                if (child.every(item => potParent.indexOf(item) !== -1)) {
-                                    binaryTree.associate(pleaf, leaf);
-                                    break;
-                                }
-                                else { j = j - 1; }
-                            }
-                        }
-                        else { j = j - 1; }
-                    }
-                }
-            }
-
             function displayTree(){
+                console.log("-----STARTING THE displayTree() function --------");
+
                 var output = "";
                 leaves = binaryTree.getLeaves();
                 leaves.forEach(function(leaf) {

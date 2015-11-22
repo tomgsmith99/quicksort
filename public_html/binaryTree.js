@@ -6,9 +6,12 @@ var BinaryTree = function() {
 };
 
 BinaryTree.prototype.build = function() {
+    console.log("-----STARTING THE buildTree() function------");
+
     // find each leaf's parent and children
     leaves = this.leaves;
 
+    // I'm going backward through the list; otherwise I would use forEach
     for (i = leaves.length - 1; i > 0; i--) {
 
         j = i - 1;
@@ -64,6 +67,8 @@ BinaryTree.prototype.associate = function(parent, child) {
 // logic is a little complocated, but it works
 // [explanation]
 BinaryTree.prototype.flatten = function() {
+    console.log("--------------STARTING THE flatten() function-------------");
+
     var flatArray = [];
     var usedParents = [];
 
@@ -112,13 +117,14 @@ BinaryTree.prototype.getTotal = function() {
 };
 
 BinaryTree.prototype.show = function() {
+    console.log("-------------- STARTING THE show() function ---------------");
+
     this.leaves.forEach(function(leaf) { leaf.show(); });
 };
 
 BinaryTree.prototype.showValues = function() {
-    this.leaves.forEach(function(leaf) {
-        console.log("my data is: " + leaf.data);
-    });
+    console.log("The list of values is: ");
+    this.leaves.forEach(function(leaf) { console.log(leaf.data); });
 };
 
 BinaryTree.prototype.getLeaf = function(index) { return this.leaves[index]; };
@@ -126,6 +132,8 @@ BinaryTree.prototype.getLeaf = function(index) { return this.leaves[index]; };
 BinaryTree.prototype.getLeaves = function() { return this.leaves; };
 
 BinaryTree.prototype.calculateLeafPositions = function() {
+    console.log("------STARTING THE calculateLeafPositions() function ------");
+
     this.leaves.forEach(function(leaf) {
         console.log("my index is: " + leaf.index);
         console.log("my binPos is: " + leaf.binPos);
