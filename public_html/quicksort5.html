@@ -10,15 +10,6 @@
         
         <script src ='binaryTree.js' type ='text/javascript'></script>
         <script src="jquery-2.1.4.min.js" type ="text/javascript"></script>
-        <script src="jquery.btree.js" type = "text/javascript"></script>
-
-        <script src="wz_jsgraphics.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            var myTree;
-            $(function(){
-                myTree = $("#auditorium").btree({horizontal: ""})[0];
-            });
-        </script>
         
         <script type ="text/javascript">
             var qsCount = 0;
@@ -122,7 +113,7 @@
             }
             
             window.onload = function () {
-                var A = [17, 35, 12, 32, 6, 102, 4, 8, 43, 50];
+                var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
 
                 quickSort(A, 0, (A.length - 1));
                 
@@ -140,22 +131,10 @@
                 binaryTree.flatten();
 
                 binaryTree.show();
+                
+                binaryTree.buildDivs();
 
-                displayTree();
             };
-
-            function displayTree(){
-                console.log("-----STARTING THE displayTree() function --------");
-
-                var output = "";
-                leaves = binaryTree.getLeaves();
-                leaves.forEach(function(leaf) {
-                    output = output + leaf.getData().toString();
-
-                    $("#tomQS").append("<div class = 'node'>" + leaf.getData().toString() + "</div");
-   
-                });
-            }
 
         </script>
 <!--            /*
@@ -202,59 +181,6 @@ quickSort(A, 0, (len(A) - 1))
 
     </head>
     <body>
-        
-        <div id ="quicksort">
-            <p>here's some text.</p>
-        </div>
-        
-        <div id ="auditorium" style="overflow: hidden; height: 10px; border-style: solid; border-width: 3px; border-color: #000000;">
-	<div style="border-style: inset;" id="box1">
-		<span>Box1</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box2</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box3</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box4</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box5</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box6</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box7</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box8</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box9</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box10<br/></span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box11</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box12</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box13</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box14</span>
-	</div>
-	<div style="border-style: inset;">
-		<span>Box15</span>
-	</div>
-        </div>
-        
         <div id="tomQS"></div>
     </body>
 </html>

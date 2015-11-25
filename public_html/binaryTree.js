@@ -3,6 +3,20 @@ var BinaryTree = function() {
     this.sortedInts = []; // array of ints, the result of the quicksort
     this.flatArray = []; // array of leaves, ordered by horizontal position
                             // in the tree
+    this.html = "";
+};
+
+BinaryTree.prototype.addLeaf = function(leaf) {
+    this.total = this.leaves.push(leaf);
+    leaf.setIndex(this.total - 1);
+};
+
+BinaryTree.prototype.associate = function(parent, child) {
+    child.setParent(parent);
+    parent.setChild(child);
+
+    console.log(child.getData() + " is a member of " + parent.getData());
+    console.log("---------------");
 };
 
 BinaryTree.prototype.build = function() {
@@ -50,19 +64,35 @@ BinaryTree.prototype.build = function() {
     }
 };
 
-BinaryTree.prototype.addLeaf = function(leaf) {
-    this.total = this.leaves.push(leaf);
-    leaf.setIndex(this.total - 1);
+BinaryTree.prototype.buildDivs = function() {
+    var xpos = 10; // starting with a 10px buffer from left side of screen
+    var prevID = "";
+    var prevLeafWidth = 0;
+    var prevLeaf;
+
+    console.log("testing the binarytree html: " + this.html);
+
+    var i = 0;
+    var j = 0;
+    this.flatArray.forEach(function(leaf) {
+
+        if (i !== 0) {
+            j = i - 1;
+            prevID = "leaf_" + j;
+            prevLeafWidth = document.getElementById(prevID).offsetWidth;
+            console.log("xpos is: " + xpos);
+            if (prevLeaf.isRoot === false) { xpos = xpos + prevLeafWidth; }
+        }
+
+        prevLeaf = leaf;
+
+        leaf.setDiv(xpos);
+
+        $("#tomQS").append(leaf.html);
+
+        i++;
+    });
 };
-
-BinaryTree.prototype.associate = function(parent, child) {
-    child.setParent(parent);
-    parent.setChild(child);
-
-    console.log(child.getData() + " is a member of " + parent.getData());
-    console.log("---------------");
-};
-
 // creates an array with all of the leaves in horizontal order
 // logic is a little complocated, but it works
 // [explanation]
@@ -110,6 +140,11 @@ BinaryTree.prototype.flatten = function() {
         console.log("the flat array is: " + i + " = " + leaf.getData());
         i++;
     });
+    this.flatArray = flatArray;
+};
+
+BinaryTree.prototype.getHTML = function() {
+    return this.html;
 };
 
 BinaryTree.prototype.getTotal = function() {
@@ -156,8 +191,14 @@ var Leaf = function () {
     this.depth = null; // number >= 0
     this.binPos = null; // binary position relative to parent (left || right)
     this.index = null; // number = index in binaryTree.leaves[]
+    this.isRoot = false;
     this.hpos = null; // horizotal position in the binary tree
     this.ancestors = []; // array of leaves; parents of parents
+    this.width = null; // the number of integers in the data for this leaf
+    
+    this.xpos = 0; // for layout
+    this.ypos = 0; // for layout
+    this.divID = "";
 };
 
 Leaf.prototype.getAncestors = function() {
@@ -176,6 +217,9 @@ Leaf.prototype.getData = function() {
     else { return this.data; }
 };
 
+Leaf.prototype.getDiv = function() {
+    
+}
 Leaf.prototype.hasChildren = function() {
     if (this.leftChild === null && this.rightChild === null) {
         return false;
@@ -221,13 +265,84 @@ Leaf.prototype.setChild = function (child) {
     }
 };
 
-Leaf.prototype.setData = function(data) { this.data = data; };
-Leaf.prototype.setIndex = function(index) { this.index = index; };
+// NTS: I should force a number value to be a singleton array
+Leaf.prototype.setData = function(data) {
+    this.data = data;
+    if (typeof data === "number") {
+        this.width = 1;
+        this.isSingleton = true;
+    }
+    else { 
+        this.width = data.length;
+        this.isSingleton = false;
+    }
+};
+
+Leaf.prototype.setDiv = function(x) {
+    var y = 0;
+    
+    this.divID = "leaf_" + this.hpos;
+    console.log("my divID is: " + this.divID);
+    
+    this.style = "left:" + x + "px;";
+    
+    if (this.depth === 0) { y = 10; }
+    else { y = 10 + (this.depth * 40); }
+    
+    this.style += "top:" + y + "px;";
+    
+    this.html =  "<div class = 'node'";
+    this.html += " id = '" + this.divID + "'";
+    this.html += " style = '" + this.style + "'";
+    this.html += ">";
+    
+    // this.html += this.data;
+    
+    if (this.isSingleton) {
+        this.html += this.getCellDiv(0);
+    }
+    else {
+        for (i=0; i < this.data.length; i++) {
+            this.html += this.getCellDiv(i);
+            console.log("the cell div html is: ");
+            console.log(this.getCellDiv(i));
+        }
+    }
+    
+    this.html += "</div>";
+    
+    console.log("my HTML is: " + this.html);
+};
+
+Leaf.prototype.getCellDiv = function(i) {
+    var cellDiv;
+    var cellDivID;
+    
+    cellDivID = this.divID + "_" + i;
+    
+    cellDiv = "<div class = 'cell' id = '" + cellDivID + "'>";
+    cellDiv += this.getValue(i);
+    // console.log("this value is: " + this.getValue())
+    cellDiv += "</div>";
+    
+    return cellDiv;
+};
+
+Leaf.prototype.getValue = function(i) {
+    if (this.isSingleton) { return this.data; }
+    else { return this.data[i]; }
+};
+
+Leaf.prototype.setIndex = function(index) {
+    this.index = index;
+    if (index === 0) { this.isRoot = true; }
+};
 Leaf.prototype.setParent = function(parent) { this.parent = parent; };
 
 Leaf.prototype.show = function() {
     console.log("my index is: " + this.index);
     console.log("my data is: " + this.data);
+    console.log("my width is: " + this.width);
 
     if (this.parent !== null) {
         console.log("my parent's data is: " + this.parent.getData());

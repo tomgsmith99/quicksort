@@ -1,6 +1,22 @@
 .node {
-    border-style: solid;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
     border-width: 1px;
     width: max-content;
-    /* display: inline; */
+    position: absolute;
+    font-family: verdana, arial, helvetica, sans-serif;
+/*    display: none;*/
+}
+
+.cell {
+    display: inline-block;
+    border-right-style: solid;
+    border-width: 1px;
+    padding: 2px;
+    text-align: center;
+}
+
+#tomQS {
+    padding: 10px;
 }
