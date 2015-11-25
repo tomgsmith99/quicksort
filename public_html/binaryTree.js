@@ -69,6 +69,8 @@ BinaryTree.prototype.buildDivs = function() {
     var prevID = "";
     var prevLeafWidth = 0;
     var prevLeaf;
+    var prevCellID = "";
+    var prevCellWidth = 0;
 
     console.log("testing the binarytree html: " + this.html);
 
@@ -81,7 +83,23 @@ BinaryTree.prototype.buildDivs = function() {
             prevID = "leaf_" + j;
             prevLeafWidth = document.getElementById(prevID).offsetWidth;
             console.log("xpos is: " + xpos);
-            if (prevLeaf.isRoot === false) { xpos = xpos + prevLeafWidth; }
+            if (prevLeaf.isRoot === false) {
+                xpos = xpos + prevLeafWidth;
+                
+                if (prevLeaf.isSingleton && prevLeaf.binPos === "left") {
+                    xpos = xpos - (prevLeafWidth / 2);
+                }
+                else if (leaf.isSingleton && leaf.binPos === "right") {
+                    prevCellID = prevID + "_" + (prevLeaf.data.length - 1);
+                    prevCellWidth = document.getElementById(prevCellID).offsetWidth;
+                    console.log("the prevCellID is: " + prevCellID);
+                    xpos = xpos - (prevCellWidth / 2);
+                }
+                else if (leaf.data.length > 3) {
+                    // xpos = xpos - (leaf.data.length * 5);
+                }
+            
+            }
         }
 
         prevLeaf = leaf;
@@ -295,8 +313,6 @@ Leaf.prototype.setDiv = function(x) {
     this.html += " id = '" + this.divID + "'";
     this.html += " style = '" + this.style + "'";
     this.html += ">";
-    
-    // this.html += this.data;
     
     if (this.isSingleton) {
         this.html += this.getCellDiv(0);
