@@ -9,6 +9,7 @@
         <link rel ="stylesheet" type ="text/css" href ="tsQuicksort.css">
         
         <script src ='binaryTree.js' type ='text/javascript'></script>
+        <script src="jsplumb/jsPlumb-2.0.4.js"></script>
         <script src="jquery-2.1.4.min.js" type ="text/javascript"></script>
         
         <script type ="text/javascript">
@@ -48,8 +49,13 @@
             function partition(A, left, right){
                 var pivot = A[left];
                 var i = left;
-                var output = "";
-                
+
+                // Store the subarray in the binary tree
+                // this procedure is not necessary for quicksort
+                var leaf = new Leaf();
+                binaryTree.addLeaf(leaf);
+                leaf.setPreArray(A.slice(left, (right + 1)));
+
                 console.log("--------PBEGIN------------");
                 console.log("This is the partition we are going to work on:");
 
@@ -91,14 +97,16 @@
 
                 printSubArray(A, left, right);
 
+                leaf.setPostArray(A.slice(left, (right + 1)));
+
                 // Store the subarray in the binary tree
                 // this procedure is not necessary for quicksort
                 thisArray = [];
                 for (k = left; k <= right; k++) { thisArray.push(A[k]); }
                 
-                var leaf = new Leaf();
+                // var leaf = new Leaf();
                 leaf.setData(thisArray);
-                binaryTree.addLeaf(leaf);
+                // binaryTree.addLeaf(leaf);
 
                 console.log("The full array is now: " + A.join(' '));
                 

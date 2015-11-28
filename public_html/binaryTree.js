@@ -213,7 +213,8 @@ var Leaf = function () {
     this.hpos = null; // horizotal position in the binary tree
     this.ancestors = []; // array of leaves; parents of parents
     this.width = null; // the number of integers in the data for this leaf
-    
+    this.preArray = // array = the state of the partition when it arrives at
+                    // the partition function
     this.xpos = 0; // for layout
     this.ypos = 0; // for layout
     this.divID = "";
@@ -355,11 +356,22 @@ Leaf.prototype.setIndex = function(index) {
 };
 Leaf.prototype.setParent = function(parent) { this.parent = parent; };
 
+Leaf.prototype.setPostArray = function(postArray) {
+    this.postArray = postArray;
+};
+
+Leaf.prototype.setPreArray = function(preArray) {
+    this.preArray = preArray;
+};
+
 Leaf.prototype.show = function() {
     console.log("my index is: " + this.index);
     console.log("my data is: " + this.data);
     console.log("my width is: " + this.width);
 
+    if (this.preArray) {
+        console.log("my preArray is: " + this.preArray);
+    }
     if (this.parent !== null) {
         console.log("my parent's data is: " + this.parent.getData());
         console.log("my parent index is: " + this.parent.index);
