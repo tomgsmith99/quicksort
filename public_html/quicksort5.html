@@ -40,7 +40,7 @@
                 else if (left === right) { // Note: this clause is not needed for qs!
                     console.log("Nope. This partition is a singleton: " + A[left]);
                     var leaf = new Leaf();
-                    leaf.setData(A[left]);
+                    leaf.setPreArray(A[left]);
                     binaryTree.addLeaf(leaf);
                 }
                 else { console.log("right > left, so we are done!"); } // also unnecessary
@@ -101,11 +101,11 @@
 
                 // Store the subarray in the binary tree
                 // this procedure is not necessary for quicksort
-                thisArray = [];
-                for (k = left; k <= right; k++) { thisArray.push(A[k]); }
+                // thisArray = [];
+                // for (k = left; k <= right; k++) { thisArray.push(A[k]); }
                 
                 // var leaf = new Leaf();
-                leaf.setData(thisArray);
+                // leaf.setData(thisArray);
                 // binaryTree.addLeaf(leaf);
 
                 console.log("The full array is now: " + A.join(' '));
@@ -116,9 +116,7 @@
                 return retVal;
             }
             
-            function printSubArray(A, left, right) {
-                console.log(A.slice(left, right+1));
-            }
+            function printSubArray(A, l, r) { console.log(A.slice(l, r+1)); }
             
             window.onload = function () {
                 var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
@@ -134,7 +132,7 @@
 
                 binaryTree.build();
 
-                binaryTree.calculateLeafPositions();
+                binaryTree.calculateLeafDepths();
 
                 binaryTree.flatten();
 
