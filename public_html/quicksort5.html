@@ -40,7 +40,8 @@
                 else if (left === right) { // Note: this clause is not needed for qs!
                     console.log("Nope. This partition is a singleton: " + A[left]);
                     var leaf = new Leaf();
-                    leaf.setPreArray(A[left]);
+                    leaf.setArray("pre", A.slice(left, left+1));
+                    leaf.setArray("post", A.slice(left, left+1));
                     binaryTree.addLeaf(leaf);
                 }
                 else { console.log("right > left, so we are done!"); } // also unnecessary
@@ -54,7 +55,7 @@
                 // this procedure is not necessary for quicksort
                 var leaf = new Leaf();
                 binaryTree.addLeaf(leaf);
-                leaf.setPreArray(A.slice(left, (right + 1)));
+                leaf.setArray("pre", A.slice(left, (right + 1)));
 
                 console.log("--------PBEGIN------------");
                 console.log("This is the partition we are going to work on:");
@@ -97,7 +98,7 @@
 
                 printSubArray(A, left, right);
 
-                leaf.setPostArray(A.slice(left, (right + 1)));
+                leaf.setArray("post", A.slice(left, (right + 1)));
 
                 // Store the subarray in the binary tree
                 // this procedure is not necessary for quicksort
@@ -138,7 +139,7 @@
 
                 binaryTree.show();
                 
-                binaryTree.buildDivs();
+                binaryTree.buildHTML();
 
             };
 
