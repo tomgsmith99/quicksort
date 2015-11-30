@@ -1,0 +1,38 @@
+.node {
+
+    position: absolute;
+    font-family: verdana, arial, helvetica, sans-serif;
+/*    text-align: center;*/
+    padding: -10px;
+/*    margin: 0px;*/
+
+/*    display: none;*/
+}
+
+.array {
+/*    width: max-content;*/
+
+
+/*    text-align: center;*/
+
+}
+
+.cell {
+/*    display: inline-block;*/
+    display: inline-block;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-right-style: solid;
+    padding: 3px;
+    text-align: center;
+    margin: 0px;
+/*    margin: auto;*/
+/*    width: max-content;*/
+/*    width: 100%*/
+}
+
+#tomQS {
+    padding: 0px;
+}

@@ -233,10 +233,13 @@ Leaf.prototype.getCellDiv = function(i) {
     return cellDiv;
 };
 
+
 Leaf.prototype.getLastCell = function() {
-    
+// Very hacky, needs to be rewritten
     var cell = new Cell();
-    cell.setDivID(this.divID, (this.length - 1));
+    // cell.divID = this.divID + "_post_" + (this.length - 1);
+    cell.divID = this.divID + "_pre_" + (this.length - 1);
+
     cell.setWidth();
     return cell;
 };
@@ -326,16 +329,11 @@ Leaf.prototype.setHTML = function() {
     this.html += " id = '" + this.divID + "'";
     this.html += " style = '" + this.style + "'";
     this.html += ">";
-    
-    // this.html += this.getHTML("preArray");
-    // this.postArray.divID = "this is a great test";
-    
-    // console.log("here is the test: " + this.postArray.divID);
-    
-    /*
-    this.html += this.preArray.getHTML();
-    this.html += this.postArray.getHTML();
-    */
+
+    this.html += this.preArray.getHTML(this.divID, this.depth);
+    // this.html += this.postArray.getHTML(this.divID);
+
+/*
     if (this.isSingleton) {
         this.html += this.getCellDiv(0);
     }
@@ -346,13 +344,13 @@ Leaf.prototype.setHTML = function() {
             console.log(this.getCellDiv(i));
         }
     }
-    
+*/    
     this.html += "</div>";
     
     console.log("my HTML is: " + this.html);
 };
 
-
+/*
 Leaf.prototype.getHTML = function() {
     var html = "";
 
@@ -365,6 +363,7 @@ Leaf.prototype.getHTML = function() {
     
     html = "<div class = 'array' id = '" + "";
 };
+*/
 
 Leaf.prototype.setIndex = function(index) {
     this.index = index;
@@ -411,10 +410,11 @@ var Cell = function () {
     this.divID = "";
 };
 
+/*
 Cell.prototype.setDivID = function(leafID, index) {
     this.divID = leafID + "_" + index;
 };
-
+*/
 Cell.prototype.setWidth = function() {
     this.width = document.getElementById(this.divID).offsetWidth;
 };
@@ -429,6 +429,34 @@ Subarray.prototype.setDivID = function(leafID) {
     this.divID = leafID + "_" + this.type;
 };
 
-Subarray.prototype.getHTML = function() {
+Subarray.prototype.getHTML = function(leafID, depth) {
+    var y = 0;
+    var style = "";
     
+    this.divID = leafID + "_" + this.type;
+    
+    this.html = "";
+    
+    if (depth === 0) { y = 10; }
+    else { y = 10 + (depth * 40); }
+    
+    style = "top:" + y + "px;";
+    
+    this.html += "<div class = 'array' id = '" + this.divID + "'>";
+    
+    var i = 0;
+    this.data.forEach(function(value) {
+        var cell = new Cell();
+        cell.divID = this.divID + "_" + i;
+        cell.html = "<div class='cell' id='" + cell.divID + "'";
+        cell.html += " style='" + style + "'>";
+        cell.html += value;
+        cell.html += "</div>";
+        this.html += cell.html;
+        i++;
+    }, this);
+    
+    this.html += "</div>";
+    
+    return this.html;
 };
