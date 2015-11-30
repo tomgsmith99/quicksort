@@ -112,11 +112,11 @@ BinaryTree.prototype.flatten = function() {
 
     // NTS: change this to a .every function
     this.leaves.forEach(function(leaf) {
-        if (leaf.isSingleton) {
+        if (leaf.isSingleton()) {
             this.flatArray[i] = leaf;
             leaf.set_H_index(i);
             i++;
-            if (leaf.isLeftChild) {
+            if (leaf.isLeftChild()) {
                 this.flatArray[i] = leaf.parent;
                 leaf.parent.set_H_index(i);
                 usedParents.push(leaf.parent);
@@ -163,10 +163,10 @@ BinaryTree.prototype.getXpos = function(leaf){
                          // can get added to the DOM and measured.
     if (prevLeaf.isRoot) { return prevLeaf.xpos; }
     else {
-        if (prevLeaf.isSingleton && prevLeaf.isLeftChild) {
+        if (prevLeaf.isSingleton() && prevLeaf.isLeftChild()) {
             xpos = prevLeaf.xpos + (prevLeaf.width / 2);
         }
-        else if (leaf.isSingleton && leaf.isRightChild) {
+        else if (leaf.isSingleton() && leaf.isRightChild()) {
             var cell = prevLeaf.getLastCell();
             xpos = prevLeaf.xpos + prevLeaf.width - (cell.width / 2);
         }
@@ -194,8 +194,6 @@ var Leaf = function () {
     this.depth = null; // number >= 0
     this.binPos = null; // binary position relative to parent (left || right)
     this.index = null; // number = index in binaryTree.leaves[]
-    this.isLeftChild = null;
-    this.isRightChild = null;
     this.isRoot = false;
     this.hIndex = null; // horizontal position in the binary tree
     this.ancestors = []; // array of leaves; parents of parents
@@ -237,7 +235,6 @@ Leaf.prototype.getCellDiv = function(i) {
 Leaf.prototype.getLastCell = function() {
 // Very hacky, needs to be rewritten
     var cell = new Cell();
-    // cell.divID = this.divID + "_post_" + (this.length - 1);
     cell.divID = this.divID + "_pre_" + (this.length - 1);
 
     cell.setWidth();
@@ -275,6 +272,10 @@ Leaf.prototype.hasParent = function() {
     else { return false; }
 };
 
+Leaf.prototype.isSingleton = function() {
+    return (this.length === 1);
+};
+
 Leaf.prototype.setAncestors = function() {
     if (this.parent) {
         var thisLeaf = this;
@@ -285,17 +286,11 @@ Leaf.prototype.setAncestors = function() {
     }
 };
 
-Leaf.prototype.setBinPos = function(pos) {
-    if (pos === "left") {
-        this.binPos = "left";
-        this.isLeftChild = true;
-        this.isRightChild = false;
-    }
-    else if (pos === "right") {
-        this.binPos = "right";
-        this.isLeftChild = false;
-        this.isRightChild = true;
-    }
+Leaf.prototype.isLeftChild = function() {
+    return (this.binPos === "left");
+};
+Leaf.prototype.isRightChild = function() {
+    return (this.binPos === "right");
 };
 
 Leaf.prototype.setChild = function (child) {
@@ -303,13 +298,13 @@ Leaf.prototype.setChild = function (child) {
 // of the items in the main Leaves array in the binary tree
     if (this.hasLeftChild()) {
         this.rightChild = this.leftChild;
-        this.rightChild.setBinPos("right");
+        this.rightChild.binPos = "right";
         this.leftChild = child;
-        child.setBinPos("left");
+        child.binPos = "left";
     }
     else {
         this.leftChild = child;
-        child.setBinPos("left");
+        child.binPos = "left";
     }
 };
 
@@ -321,7 +316,7 @@ Leaf.prototype.setHTML = function() {
     this.style = "left:" + this.xpos + "px;";
     
     if (this.depth === 0) { y = 10; }
-    else { y = 10 + (this.depth * 40); }
+    else { y = 10 + (this.depth * 100); }
     
     this.style += "top:" + y + "px;";
     
@@ -331,39 +326,15 @@ Leaf.prototype.setHTML = function() {
     this.html += ">";
 
     this.html += this.preArray.getHTML(this.divID, this.depth);
-    // this.html += this.postArray.getHTML(this.divID);
 
-/*
-    if (this.isSingleton) {
-        this.html += this.getCellDiv(0);
+    if (this.isSingleton() === false) {
+        this.html += this.postArray.getHTML(this.divID);
     }
-    else {
-        for (i=0; i < this.length; i++) {
-            this.html += this.getCellDiv(i);
-            console.log("the cell div html is: ");
-            console.log(this.getCellDiv(i));
-        }
-    }
-*/    
+
     this.html += "</div>";
     
     console.log("my HTML is: " + this.html);
 };
-
-/*
-Leaf.prototype.getHTML = function() {
-    var html = "";
-
-    var divID = this.divID + "_";
-    
-    if (arrayType === "preArray") {
-        divID += "pre";
-    }
-    else { this.postArray.divID = this.divID + "_post"; }
-    
-    html = "<div class = 'array' id = '" + "";
-};
-*/
 
 Leaf.prototype.setIndex = function(index) {
     this.index = index;
@@ -375,7 +346,7 @@ Leaf.prototype.setArray = function(type, array) {
     if (type === "pre") { this.preArray = new Subarray("pre", array); }
     else { this.postArray = new Subarray("post", array); }
     this.length = array.length;
-    if (this.length === 1) { this.isSingleton = true; }
+//    if (this.length === 1) { this.isSingleton = true; }
 };
 
 Leaf.prototype.show = function() {
@@ -438,7 +409,7 @@ Subarray.prototype.getHTML = function(leafID, depth) {
     this.html = "";
     
     if (depth === 0) { y = 10; }
-    else { y = 10 + (depth * 40); }
+    else { y = 10 + (depth * 100); }
     
     style = "top:" + y + "px;";
     
@@ -448,8 +419,10 @@ Subarray.prototype.getHTML = function(leafID, depth) {
     this.data.forEach(function(value) {
         var cell = new Cell();
         cell.divID = this.divID + "_" + i;
-        cell.html = "<div class='cell' id='" + cell.divID + "'";
-        cell.html += " style='" + style + "'>";
+        cell.html = "<div class='cell' id='" + cell.divID + "'>";
+
+//        cell.html = "<div class='cell' id='" + cell.divID + "'";
+//        cell.html += " style='" + style + "'>";
         cell.html += value;
         cell.html += "</div>";
         this.html += cell.html;
