@@ -161,14 +161,16 @@ BinaryTree.prototype.getXpos = function(leaf){
     prevLeaf = this.flatArray[leaf.hIndex - 1];
     prevLeaf.setWidth(); // this needs to happen here so that the div
                          // can get added to the DOM and measured.
-    if (prevLeaf.isRoot) { return prevLeaf.xpos; }
+    if (prevLeaf.isRoot()) { return prevLeaf.xpos; }
     else {
         if (prevLeaf.isSingleton() && prevLeaf.isLeftChild()) {
             xpos = prevLeaf.xpos + (prevLeaf.width / 2);
         }
         else if (leaf.isSingleton() && leaf.isRightChild()) {
             var cell = prevLeaf.getLastCell();
-            xpos = prevLeaf.xpos + prevLeaf.width - (cell.width / 2);
+            xpos = 
+                    prevLeaf.xpos + 
+                    prevLeaf.width - (cell.getWidth() / 2);
         }
         else { xpos = prevLeaf.xpos + prevLeaf.width; }
     }
@@ -194,7 +196,6 @@ var Leaf = function () {
     this.depth = null; // number >= 0
     this.binPos = null; // binary position relative to parent (left || right)
     this.index = null; // number = index in binaryTree.leaves[]
-    this.isRoot = false;
     this.hIndex = null; // horizontal position in the binary tree
     this.ancestors = []; // array of leaves; parents of parents
     this.length = null; // the number of integers in the data for this leaf
@@ -209,43 +210,30 @@ var Leaf = function () {
 
 Leaf.prototype.getAncestors = function() {
     var output = "";
-    
     this.ancestors.forEach(function(leaf) {
         output += leaf.preArray.data.toString() + " | ";
     });
-    
     return output;
-
 };
-
-Leaf.prototype.getCellDiv = function(i) {
-    var cellDiv;
-    var cellDivID;
-    
-    cellDivID = this.divID + "_" + i;
-    
-    cellDiv = "<div class = 'cell' id = '" + cellDivID + "'>";
-    cellDiv += this.postArray.data[i];
-    cellDiv += "</div>";
-    
-    return cellDiv;
-};
-
 
 Leaf.prototype.getLastCell = function() {
-// Very hacky, needs to be rewritten
-    var cell = new Cell();
-    cell.divID = this.divID + "_pre_" + (this.length - 1);
-
-    cell.setWidth();
-    return cell;
+    return this.postArray.cells[this.length-1];
 };
 
-// Sets the horizontal order of the Leaf in the binaryTree
-// Also sets its divID
+Leaf.prototype.setDivIDs = function() {
+    this.preArray.divID = this.divID + "_pre";
+    this.preArray.setDivIDs();
+    this.postArray.divID = this.divID + "_post";
+    this.postArray.setDivIDs();
+};
+
 Leaf.prototype.set_H_index = function (i) {
+// Sets the horizontal order of the Leaf in the binaryTree
+// Also sets the divID for the Leaf, as well as its preArray, postArray
+// and their cells.
     this.hIndex = i;
     this.divID = "leaf_" + i;
+    this.setDivIDs();
 };
 
 Leaf.prototype.setWidth = function () {
@@ -253,30 +241,24 @@ Leaf.prototype.setWidth = function () {
 };
 
 Leaf.prototype.hasChildren = function() {
-    if (this.leftChild === null && this.rightChild === null) {
-        return false;
-    }
-    else { return true; }
+    return (this.hasLeftChild() || this.hasRightChild());
 };
 
 Leaf.prototype.hasLeftChild = function() {
-    if (this.leftChild === null) { return false; }
-    else { return true; }
+    return (this.leftChild !== null);
 };
 Leaf.prototype.hasRightChild = function() {
-    if (this.rightChild === null) { return false; }
-    else { return true; }
+    return (this.rightChild !== null);
 };
-Leaf.prototype.hasParent = function() {
-    if (this.parent) { return true; }
-    else { return false; }
-};
+
+Leaf.prototype.hasParent = function() { return (this.parent !== null); };
 
 Leaf.prototype.isSingleton = function() {
     return (this.length === 1);
 };
 
 Leaf.prototype.setAncestors = function() {
+    var i;
     if (this.parent) {
         var thisLeaf = this;
         for (i = this.depth; i > 0; i--) {
@@ -291,6 +273,10 @@ Leaf.prototype.isLeftChild = function() {
 };
 Leaf.prototype.isRightChild = function() {
     return (this.binPos === "right");
+};
+
+Leaf.prototype.isRoot = function() {
+    return (this.index === 0);
 };
 
 Leaf.prototype.setChild = function (child) {
@@ -325,10 +311,10 @@ Leaf.prototype.setHTML = function() {
     this.html += " style = '" + this.style + "'";
     this.html += ">";
 
-    this.html += this.preArray.getHTML(this.divID, this.depth);
+    this.html += this.preArray.getHTML();
 
     if (this.isSingleton() === false) {
-        this.html += this.postArray.getHTML(this.divID);
+        this.html += this.postArray.getHTML();
     }
 
     this.html += "</div>";
@@ -338,15 +324,19 @@ Leaf.prototype.setHTML = function() {
 
 Leaf.prototype.setIndex = function(index) {
     this.index = index;
-    if (index === 0) { this.isRoot = true; }
 };
+
 Leaf.prototype.setParent = function(parent) { this.parent = parent; };
 
 Leaf.prototype.setArray = function(type, array) {
-    if (type === "pre") { this.preArray = new Subarray("pre", array); }
-    else { this.postArray = new Subarray("post", array); }
+    if (type === "pre") {
+        this.preArray = new Subarray("pre", array, 0);
+        this.pivotValue = this.preArray.pivotValue;
+    }
+    else {
+        this.postArray = new Subarray("post", array, this.pivotValue);
+    }
     this.length = array.length;
-//    if (this.length === 1) { this.isSingleton = true; }
 };
 
 Leaf.prototype.show = function() {
@@ -377,56 +367,52 @@ Leaf.prototype.show = function() {
     console.log("-----------------------");
 };
 
-var Cell = function () {
+var Cell = function (value) {
     this.divID = "";
+    this.value = value;
+    this.isPivot = false;
 };
 
-/*
-Cell.prototype.setDivID = function(leafID, index) {
-    this.divID = leafID + "_" + index;
-};
-*/
-Cell.prototype.setWidth = function() {
-    this.width = document.getElementById(this.divID).offsetWidth;
+Cell.prototype.getWidth = function() {
+    return document.getElementById(this.divID).offsetWidth;
 };
 
-var Subarray = function(arrayType, data) {
+var Subarray = function(arrayType, data, pivotVal) {
     this.type = arrayType; // "pre" || "post"
     this.data = data;
+    this.cells = [];
+    this.pivotVal = pivotVal;
+    this.pivotIndex = this.data.indexOf(pivotVal);
+    this.divID = "";
+    
+    var i = 0;
+    this.data.forEach(function (value) {
+        var cell = new Cell(value);
+        if (i === this.pivotIndex) { cell.isPivot = true; }
+        this.cells.push(cell);
+    }, this);
+    
     console.log("XXXXXX THE DATA IS: " + this.data);
 };
 
-Subarray.prototype.setDivID = function(leafID) {
-    this.divID = leafID + "_" + this.type;
+Subarray.prototype.setDivIDs = function() {
+    var i = 0;
+    this.cells.forEach(function(cell) {
+        cell.divID = this.divID + "_" + i;
+        i++;
+    }, this);
 };
 
-Subarray.prototype.getHTML = function(leafID, depth) {
-    var y = 0;
-    var style = "";
-    
-    this.divID = leafID + "_" + this.type;
-    
+Subarray.prototype.getHTML = function() {
     this.html = "";
-    
-    if (depth === 0) { y = 10; }
-    else { y = 10 + (depth * 100); }
-    
-    style = "top:" + y + "px;";
-    
-    this.html += "<div class = 'array' id = '" + this.divID + "'>";
-    
-    var i = 0;
-    this.data.forEach(function(value) {
-        var cell = new Cell();
-        cell.divID = this.divID + "_" + i;
-        cell.html = "<div class='cell' id='" + cell.divID + "'>";
 
-//        cell.html = "<div class='cell' id='" + cell.divID + "'";
-//        cell.html += " style='" + style + "'>";
-        cell.html += value;
+    this.html += "<div class = 'array' id = '" + this.divID + "'>";
+
+    this.cells.forEach(function(cell) {
+        cell.html = "<div class='cell' id='" + cell.divID + "'>";
+        cell.html += cell.value;
         cell.html += "</div>";
         this.html += cell.html;
-        i++;
     }, this);
     
     this.html += "</div>";
