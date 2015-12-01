@@ -5,12 +5,16 @@
 /*    display: none;*/
 }
 
-.cell {
+.cell, .pivot {
     display: inline-block;
     border-right-style: solid;
     border-width: 1px;
     padding: 2px;
     text-align: center;
+}
+
+.pivot {
+    background-color: yellow;
 }
 
 .array {

@@ -330,11 +330,14 @@ Leaf.prototype.setParent = function(parent) { this.parent = parent; };
 
 Leaf.prototype.setArray = function(type, array) {
     if (type === "pre") {
-        this.preArray = new Subarray("pre", array, 0);
+        this.preArray = new Subarray("pre", array);
+        this.preArray.setPivotPos();
         this.pivotValue = this.preArray.pivotValue;
     }
     else {
-        this.postArray = new Subarray("post", array, this.pivotValue);
+        // console.log("trying to set up a new postarray with a pivotvalue of: " + this.pivotValue);
+        this.postArray = new Subarray("post", array);
+        this.postArray.setPivotPos(this.pivotValue);
     }
     this.length = array.length;
 };
@@ -369,27 +372,39 @@ Leaf.prototype.show = function() {
 
 var Cell = function (value) {
     this.divID = "";
+    this.html = "";
     this.value = value;
     this.isPivot = false;
+};
+
+Cell.prototype.getHTML = function() {
+    var cssClass = "cell";
+    
+    if (this.isPivot) { cssClass = "pivot"; }
+    this.html = "<div class='" + cssClass + "' id='" + this.divID + "'>";
+    this.html += this.value;
+    this.html += "</div>";
+    return this.html;
 };
 
 Cell.prototype.getWidth = function() {
     return document.getElementById(this.divID).offsetWidth;
 };
 
-var Subarray = function(arrayType, data, pivotVal) {
+var Subarray = function(arrayType, data) {
     this.type = arrayType; // "pre" || "post"
     this.data = data;
     this.cells = [];
-    this.pivotVal = pivotVal;
-    this.pivotIndex = this.data.indexOf(pivotVal);
     this.divID = "";
     
-    var i = 0;
     this.data.forEach(function (value) {
         var cell = new Cell(value);
-        if (i === this.pivotIndex) { cell.isPivot = true; }
+//        if (i === this.pivotIndex) {
+//            console.log("FOUND THE PIVOT: " + this.pivotIndex);
+//            cell.isPivot = true;
+//        }
         this.cells.push(cell);
+        // i++;
     }, this);
     
     console.log("XXXXXX THE DATA IS: " + this.data);
@@ -403,16 +418,24 @@ Subarray.prototype.setDivIDs = function() {
     }, this);
 };
 
-Subarray.prototype.getHTML = function() {
-    this.html = "";
+Subarray.prototype.setPivotPos = function(pivotVal) {
+    if (this.type === "pre") {
+        this.pivotIndex = 0;
+        this.pivotValue = this.data[0];
+        this.cells[0].isPivot = true;
+    }
+    else if (this.type === "post") {
+        this.pivotValue = pivotVal;
+        this.pivotIndex = this.data.indexOf(pivotVal);
+        this.cells[this.pivotIndex].isPivot = true;
+    }
+};
 
-    this.html += "<div class = 'array' id = '" + this.divID + "'>";
+Subarray.prototype.getHTML = function() {
+    this.html = "<div class = 'array' id = '" + this.divID + "'>";
 
     this.cells.forEach(function(cell) {
-        cell.html = "<div class='cell' id='" + cell.divID + "'>";
-        cell.html += cell.value;
-        cell.html += "</div>";
-        this.html += cell.html;
+        this.html += cell.getHTML();
     }, this);
     
     this.html += "</div>";
