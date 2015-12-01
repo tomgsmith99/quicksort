@@ -1,11 +1,12 @@
-var BinaryTree = function() {
+var BinaryTree = function(divID) {
     this.leaves = []; // array of leaves, in the order in which they were created
     this.sortedInts = []; // array of ints, the result of the quicksort
     this.flatArray = []; // array of leaves, ordered by horizontal position
                             // in the tree
     this.html = "";
     this.xpos = 10; // starting with a 10px buffer from left side of screen
-
+    this.divID = divID;
+    this.divIDjq = "#" + this.divID;
 };
 
 BinaryTree.prototype.addLeaf = function(leaf) {
@@ -79,7 +80,8 @@ BinaryTree.prototype.buildHTML = function() {
         leaf.setHTML();
         console.log("-----------------------------------------");
 
-        $("#tomQS").append(leaf.html);
+        $(this.divIDjq).append(leaf.html);
+
     }, this);
 };
 
@@ -102,10 +104,12 @@ BinaryTree.prototype.calculateLeafDepths = function() {
 
 BinaryTree.prototype.drawLines = function() {
     var leaves = this.leaves;
+    var divID = this.divID;
+    
     jsPlumb.ready(function() {
 
-        // jsPlumb.Defaults.Container=$("tomQS");
-        jsPlumb.setContainer("tomQS");
+        jsPlumb.setContainer(divID);
+
         jsPlumb.importDefaults({
             Connector : "Straight",
             PaintStyle:{ strokeStyle:"black", lineWidth:1 },
@@ -131,22 +135,7 @@ BinaryTree.prototype.drawLines = function() {
                 });
             }
         });
-
-    //    function isOdd(num) { return num % 2;}
-    //
-    //    for (i = 1; i <= 4; i++) {
-    //        if (isOdd(i)) {
-    //            var div1 = "div" + i;
-    //            var div2 = "div" + (i + 1);
-    //
-    //            jsPlumb.connect({
-    //                source:div1,
-    //                target:div2
-    //            });
-    //        }
-    //    }
-    //
-    });
+    }, this);
 
 };
 
@@ -307,17 +296,6 @@ Leaf.prototype.isSingleton = function() {
     return (this.length === 1);
 };
 
-Leaf.prototype.setAncestors = function() {
-    var i;
-    if (this.parent) {
-        var thisLeaf = this;
-        for (i = this.depth; i > 0; i--) {
-            thisLeaf = thisLeaf.parent;
-            this.ancestors.push(thisLeaf);
-        }
-    }
-};
-
 Leaf.prototype.isLeftChild = function() {
     return (this.binPos === "left");
 };
@@ -327,6 +305,17 @@ Leaf.prototype.isRightChild = function() {
 
 Leaf.prototype.isRoot = function() {
     return (this.index === 0);
+};
+
+Leaf.prototype.setAncestors = function() {
+    var i;
+    if (this.parent) {
+        var thisLeaf = this;
+        for (i = this.depth; i > 0; i--) {
+            thisLeaf = thisLeaf.parent;
+            this.ancestors.push(thisLeaf);
+        }
+    }
 };
 
 Leaf.prototype.setChild = function (child) {
@@ -488,4 +477,12 @@ Subarray.prototype.getHTML = function() {
     this.html += "</div>";
     
     return this.html;
+};
+
+Subarray.prototype.getPivotCell = function() {
+    return this.cells[this.pivotIndex];
+};
+
+Subarray.prototype.getPivotDivID = function() {
+    return this.getPivotCell().divID;
 };
