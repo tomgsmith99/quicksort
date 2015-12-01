@@ -113,7 +113,7 @@ BinaryTree.prototype.drawLines = function() {
         jsPlumb.importDefaults({
             Connector : "Straight",
             PaintStyle:{ strokeStyle:"black", lineWidth:1 },
-            Anchors:["Bottom", "Top"],
+            Anchors:["BottomRight", "TopRight"],
             EndpointStyle:{ radius: 1 },
             Overlays:[ 
                 ["Arrow", { location: 1, width: 5, length: 5 }]
@@ -125,9 +125,14 @@ BinaryTree.prototype.drawLines = function() {
             if (leaf.hasLeftChild()) {
                 var div1 = "";
                 var div2 = "";
-                div1 = leaf.postArray.divID;
+                // div1 = leaf.postArray.divID;
+                div1 = leaf.postArray.getPivotDivID();
                 div2 = leaf.leftChild.preArray.divID;
-                
+                if (leaf.leftChild.isSingleton()) {
+                    jsPlumb.importDefaults({
+                        Anchors:["BottomRight", "Top"]
+                    });
+                }
                 console.log("connecting " + div1 + " to " + div2);
                 jsPlumb.connect({
                     source:div1,
