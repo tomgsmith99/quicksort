@@ -113,7 +113,6 @@ BinaryTree.prototype.drawLines = function() {
         jsPlumb.importDefaults({
             Connector : "Straight",
             PaintStyle:{ strokeStyle:"black", lineWidth:1 },
-            Anchors:["BottomRight", "TopRight"],
             EndpointStyle:{ radius: 1 },
             Overlays:[ 
                 ["Arrow", { location: 1, width: 5, length: 5 }]
@@ -122,26 +121,38 @@ BinaryTree.prototype.drawLines = function() {
 
         leaves.forEach(function(leaf) {
 
-            if (leaf.hasLeftChild()) {
-                var div1 = "";
-                var div2 = "";
-                // div1 = leaf.postArray.divID;
-                div1 = leaf.postArray.getPivotDivID();
-                div2 = leaf.leftChild.preArray.divID;
-                if (leaf.leftChild.isSingleton()) {
-                    jsPlumb.importDefaults({
-                        Anchors:["BottomRight", "Top"]
-                    });
+            if (leaf.hasChildren()) {
+                var source = leaf.postArray.getPivotDivID();
+                var target;
+                
+                var anchorDest = "Top";
+                
+                if (leaf.hasLeftChild()) {
+                    target = leaf.leftChild.preArray.divID;
+                    if (leaf.leftChild.hasChildren()) {
+                        anchorDest = "TopRight";
+                    }
+                    drawLine(source, target, anchorDest);
                 }
-                console.log("connecting " + div1 + " to " + div2);
-                jsPlumb.connect({
-                    source:div1,
-                    target:div2
-                });
+                anchorDest = "Top";
+                if (leaf.hasRightChild()) {
+                    target = leaf.rightChild.preArray.divID;
+                    if (leaf.rightChild.hasChildren()) {
+                        anchorDest = "TopLeft";
+                    }
+                    drawLine(source, target, anchorDest);
+                }
             }
         });
     }, this);
-
+    
+    function drawLine(source, target, anchorDest) {
+        jsPlumb.connect({
+            anchors:["BottomRight", anchorDest],
+            source:source,
+            target:target
+        });
+    }
 };
 
 BinaryTree.prototype.flatten = function() {
