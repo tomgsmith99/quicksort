@@ -377,10 +377,11 @@ var Cell = function (value) {
     this.isPivot = false;
 };
 
-Cell.prototype.getHTML = function() {
+Cell.prototype.getHTML = function(isSingleton) {
     var cssClass = "cell";
     
-    if (this.isPivot) { cssClass = "pivot"; }
+    if (isSingleton) { cssClass = "singleton"; }
+    else if (this.isPivot) { cssClass = "pivot"; }
     this.html = "<div class='" + cssClass + "' id='" + this.divID + "'>";
     this.html += this.value;
     this.html += "</div>";
@@ -398,16 +399,12 @@ var Subarray = function(arrayType, data) {
     this.divID = "";
     
     this.data.forEach(function (value) {
-        var cell = new Cell(value);
-//        if (i === this.pivotIndex) {
-//            console.log("FOUND THE PIVOT: " + this.pivotIndex);
-//            cell.isPivot = true;
-//        }
-        this.cells.push(cell);
-        // i++;
+        this.cells.push(new Cell(value));
     }, this);
-    
-    console.log("XXXXXX THE DATA IS: " + this.data);
+};
+
+Subarray.prototype.isSingleton = function() {
+    return (this.data.length === 1);
 };
 
 Subarray.prototype.setDivIDs = function() {
@@ -435,7 +432,7 @@ Subarray.prototype.getHTML = function() {
     this.html = "<div class = 'array' id = '" + this.divID + "'>";
 
     this.cells.forEach(function(cell) {
-        this.html += cell.getHTML();
+        this.html += cell.getHTML(this.isSingleton());
     }, this);
     
     this.html += "</div>";

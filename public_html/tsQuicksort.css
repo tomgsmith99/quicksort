@@ -5,7 +5,7 @@
 /*    display: none;*/
 }
 
-.cell, .pivot {
+.cell, .pivot, .singleton {
     display: inline-block;
     border-right-style: solid;
     border-width: 1px;
@@ -15,6 +15,10 @@
 
 .pivot {
     background-color: yellow;
+}
+
+.singleton {
+    background-color: DarkSeaGreen;
 }
 
 .array {
