@@ -100,6 +100,56 @@ BinaryTree.prototype.calculateLeafDepths = function() {
     this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
 };
 
+BinaryTree.prototype.drawLines = function() {
+    var leaves = this.leaves;
+    jsPlumb.ready(function() {
+
+        // jsPlumb.Defaults.Container=$("tomQS");
+        jsPlumb.setContainer("tomQS");
+        jsPlumb.importDefaults({
+            Connector : "Straight",
+            PaintStyle:{ strokeStyle:"black", lineWidth:1 },
+            Anchors:["Bottom", "Top"],
+            EndpointStyle:{ radius: 1 },
+            Overlays:[ 
+                ["Arrow", { location: 1, width: 5, length: 5 }]
+            ]
+        });
+
+        leaves.forEach(function(leaf) {
+
+            if (leaf.hasLeftChild()) {
+                var div1 = "";
+                var div2 = "";
+                div1 = leaf.postArray.divID;
+                div2 = leaf.leftChild.preArray.divID;
+                
+                console.log("connecting " + div1 + " to " + div2);
+                jsPlumb.connect({
+                    source:div1,
+                    target:div2
+                });
+            }
+        });
+
+    //    function isOdd(num) { return num % 2;}
+    //
+    //    for (i = 1; i <= 4; i++) {
+    //        if (isOdd(i)) {
+    //            var div1 = "div" + i;
+    //            var div2 = "div" + (i + 1);
+    //
+    //            jsPlumb.connect({
+    //                source:div1,
+    //                target:div2
+    //            });
+    //        }
+    //    }
+    //
+    });
+
+};
+
 BinaryTree.prototype.flatten = function() {
 // creates an array with all of the leaves in horizontal order
 // logic is a little complicated, but it works
