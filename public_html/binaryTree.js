@@ -1,10 +1,11 @@
-var BinaryTree = function(divID) {
+var BinaryTree = function(divID, x, y) {
     this.leaves = []; // array of leaves, in the order in which they were created
     this.sortedInts = []; // array of ints, the result of the quicksort
     this.flatArray = []; // array of leaves, ordered by horizontal position
                             // in the tree
     this.html = "";
-    this.xpos = 10; // starting with a 10px buffer from left side of screen
+    this.xpos = x; // starting with a 10px buffer from left side of screen
+    this.ypos = y;
     this.divID = divID;
     this.divIDjq = "#" + this.divID;
 };

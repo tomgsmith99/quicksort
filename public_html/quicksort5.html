@@ -14,8 +14,9 @@
         
         <script type ="text/javascript">
             var qsCount = 0;
-
-            var binaryTree = new BinaryTree("quickSortCanvas");
+            
+            // initialize binaryTree object with divID and x, y coords
+            var binaryTree = new BinaryTree("quickSortCanvas", 10, 250);
 
             function quickSort(A, left, right) {
                 var pivot;
@@ -190,6 +191,7 @@ quickSort(A, 0, (len(A) - 1))
 
     </head>
     <body>
+        <div id="topnav"></div>
         <div id="quickSortCanvas"></div>
     </body>
 </html>
