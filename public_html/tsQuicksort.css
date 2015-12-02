@@ -35,6 +35,16 @@
 
 }
 
+.input {
+    margin: 1px;
+    text-align: center;
+
+}
+
+#submitValues, #randomize {
+    margin: 2px;
+}
+
 #topnavLeft {
     width: 25%
 }
