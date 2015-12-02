@@ -78,7 +78,7 @@ BinaryTree.prototype.buildHTML = function() {
         if (leaf.hIndex === 0) { leaf.xpos = this.xpos; }
         else { leaf.xpos = this.getXpos(leaf); } // careful! this = binaryTree
         
-        leaf.setHTML();
+        leaf.setHTML(this.ypos);
         console.log("-----------------------------------------");
 
         $(this.divIDjq).append(leaf.html);
@@ -350,17 +350,19 @@ Leaf.prototype.setChild = function (child) {
     }
 };
 
-Leaf.prototype.setHTML = function() {
-    var y = 0;
+Leaf.prototype.setHTML = function(y) {
+    var y_init = y;
+    var offset = 10; // gives some padding at top of div. Probably a better way
+    var y_baseline = y_init + offset;
     
     console.log("my divID is: " + this.divID);
     
     this.style = "left:" + this.xpos + "px;";
     
-    if (this.depth === 0) { y = 10; }
-    else { y = 10 + (this.depth * 100); }
+    if (this.depth === 0) { this.ypos = y_baseline; }
+    else { this.ypos = y_baseline + (this.depth * 100); }
     
-    this.style += "top:" + y + "px;";
+    this.style += "top:" + this.ypos + "px;";
     
     this.html =  "<div class = 'node'";
     this.html += " id = '" + this.divID + "'";
