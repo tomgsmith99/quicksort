@@ -2,7 +2,6 @@
     width: max-content;
     position: absolute;
     font-family: verdana, arial, helvetica, sans-serif;
-/*    display: none;*/
 }
 
 .cell, .pivot, .singleton {
@@ -28,6 +27,14 @@
     border-width: 1px;
     margin-top: 10px;
 }
-#tomQS {
-    padding: 10px;
+
+.topnav {
+    font-family: verdana, arial, helvetica, sans-serif;
+    background-color: Cornsilk;
+    display: inline-block;
+
+}
+
+#topnavLeft {
+    width: 25%
 }

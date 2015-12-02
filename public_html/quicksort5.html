@@ -11,6 +11,7 @@
         <script src ='binaryTree.js' type ='text/javascript'></script>
         <script src="jsplumb/jsPlumb-2.0.4.js"></script>
         <script src="jquery-2.1.4.min.js" type ="text/javascript"></script>
+        <script src="submissionForm.js" type="text/javascript"></script>
         
         <script type ="text/javascript">
             var qsCount = 0;
@@ -143,7 +144,8 @@
                 binaryTree.buildHTML();
                 
                 binaryTree.drawLines();
-
+                
+                $("#topnavRight").append(getQSvaluesForm());
             };
 
         </script>
@@ -191,7 +193,15 @@ quickSort(A, 0, (len(A) - 1))
 
     </head>
     <body>
-        <div id="topnav"></div>
+        <div class = "topnav" id="topnavContainer">
+            <div class="topnav" id="topnavLeft">
+                <p>Welcome to the quicksort animator. Enter in some values below, 
+                    or just get some random values, or both.</p>
+            </div>
+            <div class="topnav" id="topnavRight">
+
+            </div>
+        </div>
         <div id="quickSortCanvas"></div>
     </body>
 </html>
