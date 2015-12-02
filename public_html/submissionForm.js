@@ -22,6 +22,6 @@ function randomize() {
     
     for (i=0; i<=9; i++){
         id = "value" + i;
-        document.getElementById(id).value = 6;
+        document.getElementById(id).value = Math.floor(Math.random() * 100);
     }
 }
