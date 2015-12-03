@@ -12,7 +12,7 @@ function quickSort(A, left, right) {
     console.log("The right index is: " + right);
     console.log("Checking to see if left index < right index:");
 
-    if (left < right) {
+    if (left <= right) {
         console.log("left is < right.");
         console.log("starting the partition function.");
         pivot = partition(A, left, right);

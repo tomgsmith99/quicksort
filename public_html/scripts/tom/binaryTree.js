@@ -506,7 +506,7 @@ Subarray.prototype.setPivotPos = function(pivotVal) {
     }
     else if (this.type === "post") {
         this.pivotValue = pivotVal;
-        this.pivotIndex = this.data.indexOf(pivotVal);
+        this.pivotIndex = this.data.lastIndexOf(pivotVal);
         this.cells[this.pivotIndex].isPivot = true;
     }
 };
