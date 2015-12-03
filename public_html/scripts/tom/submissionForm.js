@@ -27,6 +27,9 @@ function randomize() {
 }
 
 function run() {
+
+    binaryTree = new BinaryTree("quickSortCanvas", 10, 120);
+    
     A =[];
     var i;
     var id;
@@ -37,4 +40,8 @@ function run() {
     }
     
     console.log("The main array is now: " + A);
+    quickSort(A, 0, (A.length - 1));
+    
+    binaryTree.display();
+
 }

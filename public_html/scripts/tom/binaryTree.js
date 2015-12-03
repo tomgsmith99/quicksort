@@ -103,6 +103,24 @@ BinaryTree.prototype.calculateLeafDepths = function() {
     this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
 };
 
+BinaryTree.prototype.display = function() {
+    this.sortedInts = A;
+
+    this.showValues();
+
+    this.build();
+
+    this.calculateLeafDepths();
+
+    this.flatten();
+
+    this.show();
+
+    this.buildHTML();
+
+    this.drawLines();
+};
+
 BinaryTree.prototype.drawLines = function() {
     var leaves = this.leaves;
     var divID = this.divID;

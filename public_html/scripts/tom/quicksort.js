@@ -1,7 +1,10 @@
+
 function quickSort(A, left, right) {
     var pivot;
 
     qsCount = qsCount + 1;
+    
+    if (qsCount > 100) { throw new Error("too many qs loops"); }
     console.log("----------QSBEGIN----------");
     console.log("Starting the qs function.");
     console.log("Iteration number: " + qsCount);
@@ -31,6 +34,7 @@ function quickSort(A, left, right) {
 function partition(A, left, right){
     var pivot = A[left];
     var i = left;
+    var j;
 
     // Store the subarray in the binary tree
     // this procedure is not necessary for quicksort
@@ -79,16 +83,9 @@ function partition(A, left, right){
 
     printSubArray(A, left, right);
 
-    leaf.setArray("post", A.slice(left, (right + 1)));
-
     // Store the subarray in the binary tree
     // this procedure is not necessary for quicksort
-    // thisArray = [];
-    // for (k = left; k <= right; k++) { thisArray.push(A[k]); }
-
-    // var leaf = new Leaf();
-    // leaf.setData(thisArray);
-    // binaryTree.addLeaf(leaf);
+    leaf.setArray("post", A.slice(left, (right + 1)));
 
     console.log("The full array is now: " + A.join(' '));
 
@@ -99,10 +96,3 @@ function partition(A, left, right){
 }
 
 function printSubArray(A, l, r) { console.log(A.slice(l, r+1)); }
-/* 
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
-
-
