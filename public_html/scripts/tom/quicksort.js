@@ -18,7 +18,7 @@ function quickSort(A, left, right) {
         pivot = partition(A, left, right);
         console.log("partition function complete.");
         console.log("result of partition function - pivot index is: " + pivot);
-        quickSort (A, left, pivot);
+        quickSort (A, left, (pivot-1));
         quickSort (A, (pivot+1), right);
     }
     else if (left === right) { // Note: this clause is not needed for qs!

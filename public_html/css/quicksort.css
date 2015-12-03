@@ -4,7 +4,7 @@
     font-family: verdana, arial, helvetica, sans-serif;
 }
 
-.cell, .pivot, .singleton {
+.cell, .pivotPost, .pivotPre, .singleton {
     display: inline-block;
     border-right-style: solid;
     border-width: 1px;
@@ -12,11 +12,11 @@
     text-align: center;
 }
 
-.pivot {
+.pivotPre {
     background-color: yellow;
 }
 
-.singleton {
+.singleton, .pivotPost {
     background-color: DarkSeaGreen;
 }
 

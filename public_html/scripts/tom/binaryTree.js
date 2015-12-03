@@ -145,29 +145,34 @@ BinaryTree.prototype.drawLines = function() {
                 var target;
                 
                 var anchorDest = "Top";
+                var anchorSrc = "Bottom";
                 
                 if (leaf.hasLeftChild()) {
                     target = leaf.leftChild.preArray.divID;
+                    anchorSrc = "BottomLeft";
                     if (leaf.leftChild.hasChildren()) {
                         anchorDest = "TopRight";
                     }
-                    drawLine(source, target, anchorDest);
+                    drawLine(source, target, anchorSrc, anchorDest);
                 }
                 anchorDest = "Top";
                 if (leaf.hasRightChild()) {
                     target = leaf.rightChild.preArray.divID;
+                    anchorSrc = "BottomRight";
                     if (leaf.rightChild.hasChildren()) {
                         anchorDest = "TopLeft";
                     }
-                    drawLine(source, target, anchorDest);
+                    drawLine(source, target, anchorSrc, anchorDest);
                 }
             }
         });
     }, this);
     
-    function drawLine(source, target, anchorDest) {
+    function drawLine(source, target, anchorSrc, anchorDest) {
         jsPlumb.connect({
-            anchors:["BottomRight", anchorDest],
+            // anchors:["BottomRight", anchorDest],
+            anchors:[anchorSrc, anchorDest],
+
             source:source,
             target:target
         });
@@ -368,6 +373,20 @@ Leaf.prototype.setChild = function (child) {
     }
 };
 
+Leaf.prototype.setArray = function(type, array) {
+    if (type === "pre") {
+        this.preArray = new Subarray("pre", array);
+        this.preArray.setPivotPos();
+        this.pivotValue = this.preArray.pivotValue;
+    }
+    else {
+        // console.log("trying to set up a new postarray with a pivotvalue of: " + this.pivotValue);
+        this.postArray = new Subarray("post", array);
+        this.postArray.setPivotPos(this.pivotValue);
+    }
+    this.length = array.length;
+};
+
 Leaf.prototype.setHTML = function(y) {
     var y_init = y;
     var offset = 10; // gives some padding at top of div. Probably a better way
@@ -398,25 +417,10 @@ Leaf.prototype.setHTML = function(y) {
     console.log("my HTML is: " + this.html);
 };
 
-Leaf.prototype.setIndex = function(index) {
-    this.index = index;
-};
+Leaf.prototype.setIndex = function(index) { this.index = index; };
 
 Leaf.prototype.setParent = function(parent) { this.parent = parent; };
 
-Leaf.prototype.setArray = function(type, array) {
-    if (type === "pre") {
-        this.preArray = new Subarray("pre", array);
-        this.preArray.setPivotPos();
-        this.pivotValue = this.preArray.pivotValue;
-    }
-    else {
-        // console.log("trying to set up a new postarray with a pivotvalue of: " + this.pivotValue);
-        this.postArray = new Subarray("post", array);
-        this.postArray.setPivotPos(this.pivotValue);
-    }
-    this.length = array.length;
-};
 
 Leaf.prototype.show = function() {
     console.log("my index is: " + this.index);
@@ -453,11 +457,14 @@ var Cell = function (value) {
     this.isPivot = false;
 };
 
-Cell.prototype.getHTML = function(isSingleton) {
+Cell.prototype.getHTML = function(isSingleton, partitionType) {
     var cssClass = "cell";
     
     if (isSingleton) { cssClass = "singleton"; }
-    else if (this.isPivot) { cssClass = "pivot"; }
+    else if (this.isPivot) {
+        if (partitionType === "pre") { cssClass = "pivotPre"; }
+        else { cssClass = "pivotPost"; }
+    }
     this.html = "<div class='" + cssClass + "' id='" + this.divID + "'>";
     this.html += this.value;
     this.html += "</div>";
@@ -508,7 +515,7 @@ Subarray.prototype.getHTML = function() {
     this.html = "<div class = 'array' id = '" + this.divID + "'>";
 
     this.cells.forEach(function(cell) {
-        this.html += cell.getHTML(this.isSingleton());
+        this.html += cell.getHTML(this.isSingleton(), this.type);
     }, this);
     
     this.html += "</div>";
