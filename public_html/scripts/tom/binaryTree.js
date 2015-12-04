@@ -164,7 +164,6 @@ BinaryTree.prototype.drawLines = function() {
     
     function drawLine(source, target, anchorSrc, anchorDest) {
         jsPlumb.connect({
-            // anchors:["BottomRight", anchorDest],
             anchors:[anchorSrc, anchorDest],
 
             source:source,
@@ -188,6 +187,16 @@ BinaryTree.prototype.flatten = function() {
                     console.log("leaf.pivotValue is pushing " + this.leaves[i].preArray.data + " into slot " + hIndex);
                     this.flatArray[hIndex] = this.leaves[i];
                     this.leaves[i].set_H_index(hIndex);
+                    if (this.leaves[i].isSingleton() && this.leaves[i].isLeftChild() && this.flatArray.length > 1) {
+                        console.log("leaf is left child and leaf is singleton");
+                        if (this.flatArray[hIndex].pivotValue === this.flatArray[hIndex - 1].pivotValue) {
+                            var temp = this.flatArray[hIndex - 1];
+                            this.flatArray[hIndex - 1] = this.flatArray[hIndex];
+                            this.flatArray[hIndex] = temp;
+                            this.leaves[i].set_H_index(hIndex - 1);
+                            this.leaves[i-1].set_H_index(hIndex);
+                        }
+                    }
                     hIndex = hIndex + 1;
                     usedLeaves.push(this.leaves[i]);
                     break;
@@ -195,75 +204,7 @@ BinaryTree.prototype.flatten = function() {
             }
         }
     }, this);
-
-//    i = 0;
-//    this.leaves.forEach(function(leaf) {
-//        if (leaf.hasChildren()) {
-//            if (leaf.hasLeftChild) {
-//                this.flatArray[i] = leaf.leftChild;
-//                i++;
-//            }
-//            this.flatArray[i] = leaf;
-//            i++;
-//            if (leaf.hasRightChild()) {
-//                this.flatArray[i] = leaf.rightChild;
-//            }
-//        }
-//    });
-
-//    this.flatArray = this.leaves.sort(function(a, b) {
-//        return 
-//    })
-
 };
-//
-//BinaryTree.prototype.flatten = function() {
-//// creates an array with all of the leaves in horizontal order
-//// logic is a little complicated, but it works
-//// [explanation]
-//    console.log("--------------STARTING THE flatten() function-------------");
-//
-//    var usedParents = [];
-//
-//    var i = 0;
-//
-//    // NTS: change this to a .every function
-//    this.leaves.forEach(function(leaf) {
-//        if (leaf.isSingleton()) {
-//            this.flatArray[i] = leaf;
-//            leaf.set_H_index(i);
-//            i++;
-//            if (leaf.isLeftChild()) {
-//                this.flatArray[i] = leaf.parent;
-//                leaf.parent.set_H_index(i);
-//                usedParents.push(leaf.parent);
-//            }
-//            else {
-//                if (usedParents.indexOf(leaf.parent) === -1) {
-//                    this.flatArray[i] = leaf.parent;
-//                    leaf.parent.set_H_index(i);
-//                    usedParents.push(leaf.parent);
-//                }
-//                else {
-//                    var thisparent = leaf.parent;
-//                    while (usedParents.indexOf(thisparent) !== -1) {
-//                        thisparent = thisparent.parent;
-//                    }
-//                    this.flatArray[i] = thisparent;
-//                    thisparent.set_H_index(i);
-//                    usedParents.push(thisparent);
-//                }
-//            }
-//            i++;
-//        }
-//    }, this);
-//
-//    i = 0;
-//    this.flatArray.forEach(function(leaf) {
-//        console.log("the flat array is: " + i + " = " + leaf.preArray.data);
-//        i++;
-//    });
-//};
 
 BinaryTree.prototype.getLeaf = function(index) { return this.leaves[index]; };
 
