@@ -41,7 +41,8 @@ function run() {
     
     console.log("The main array is now: " + A);
     quickSort(A, 0, (A.length - 1));
-    
+    console.log("---------COMPLETE-----------");
+    console.log("The sorted array is: " + A);
     binaryTree.display();
 
 }
