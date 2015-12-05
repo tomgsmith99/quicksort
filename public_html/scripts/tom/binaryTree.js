@@ -174,36 +174,52 @@ BinaryTree.prototype.drawLines = function() {
 
 BinaryTree.prototype.flatten = function() {
     console.log("--------------STARTING THE flatten() function-------------");
-    var hIndex = 0;
-    var i;
-    var usedLeaves = [];
+    var i, j;
+    var flatArray = this.leaves;
+    var temp;
 
-    this.sortedInts.forEach(function(value){
-        console.log("The value is: " + value);
-        for(i=0; i<this.leaves.length; i++) {
-            console.log("The leaf pivot value is: " + this.leaves[i].pivotValue);
-            if (this.leaves[i].pivotValue === value) {
-                if (usedLeaves.indexOf(this.leaves[i]) === -1) {
-                    console.log("leaf.pivotValue is pushing " + this.leaves[i].preArray.data + " into slot " + hIndex);
-                    this.flatArray[hIndex] = this.leaves[i];
-                    this.leaves[i].set_H_index(hIndex);
-                    if (this.leaves[i].isSingleton() && this.leaves[i].isLeftChild() && this.flatArray.length > 1) {
-                        console.log("leaf is left child and leaf is singleton");
-                        if (this.flatArray[hIndex].pivotValue === this.flatArray[hIndex - 1].pivotValue) {
-                            var temp = this.flatArray[hIndex - 1];
-                            this.flatArray[hIndex - 1] = this.flatArray[hIndex];
-                            this.flatArray[hIndex] = temp;
-                            this.leaves[i].set_H_index(hIndex - 1);
-                            this.leaves[i-1].set_H_index(hIndex);
-                        }
-                    }
-                    hIndex = hIndex + 1;
-                    usedLeaves.push(this.leaves[i]);
-                    break;
-                }
+    // First, sort the leaves by pivot value
+    for (i = 1; i < flatArray.length; i++ ) {
+        j = i;
+        while (j > 0 && (flatArray[j-1].pivotValue > flatArray[j].pivotValue)) {
+            temp = flatArray[j];
+            flatArray[j] = flatArray[j-1];
+            flatArray[j-1] = temp;
+            j = j - 1;
+        }
+    }
+
+    console.log("After the first pass, the flat array is: ");
+
+    flatArray.forEach(function(leaf){
+        console.log("pivot value: " + leaf.pivotValue + " data: " + leaf.preArray.data);
+    });
+
+    // Second, make sure that parent/child pairs appear in proper order
+    for (i = 0; i < (flatArray.length - 1); i++ ) {
+        if (flatArray[i].pivotValue === flatArray[i+1].pivotValue) {
+            if (flatArray[i].leftChild === flatArray[i+1]) {
+                temp = flatArray[i];
+                flatArray[i] = flatArray[i+1];
+                flatArray[i + 1] = temp;
             }
         }
-    }, this);
+    }
+
+    console.log("After the second pass, the flat array is: ");
+
+    flatArray.forEach(function(leaf){
+        console.log("pivot value: " + leaf.pivotValue + " data: " + leaf.preArray.data);
+    });
+    
+    // Third, assign an hIndex value to each of the leaves
+    i = 0;
+    flatArray.forEach(function(leaf){
+        leaf.set_H_index(i);
+        i++;
+    });
+    
+    this.flatArray = flatArray;
 };
 
 BinaryTree.prototype.getLeaf = function(index) { return this.leaves[index]; };
