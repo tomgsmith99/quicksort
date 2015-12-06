@@ -122,6 +122,9 @@ BinaryTree.prototype.drawLines = function() {
     
     jsPlumb.ready(function() {
 
+        // jsPlumb.repaintEverything();
+        
+
         jsPlumb.setContainer(divID);
 
         jsPlumb.importDefaults({
@@ -132,6 +135,7 @@ BinaryTree.prototype.drawLines = function() {
                 ["Arrow", { location: 1, width: 5, length: 5 }]
             ]
         });
+    
 
         leaves.forEach(function(leaf) {
 
@@ -162,6 +166,7 @@ BinaryTree.prototype.drawLines = function() {
             }
         });
     }, this);
+    
     
     function drawLine(source, target, anchorSrc, anchorDest) {
         jsPlumb.connect({
@@ -252,9 +257,13 @@ BinaryTree.prototype.getXpos = function(leaf){
                 prevLeaf.xpos + 
                 prevLeaf.width - (cell.getWidth() / 2);
     }
-    else { xpos = prevLeaf.xpos + (prevLeaf.width / 2); }
+    else {
+        // change to a ratio where if you have a small child and a large 
+        // parent, the xpos of the child needs to be larger.
+        xpos = prevLeaf.xpos + (prevLeaf.width * .8);
+    }
 
-    return xpos;
+    return Math.round(xpos);
 };
 
 BinaryTree.prototype.show = function() {

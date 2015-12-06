@@ -35,6 +35,7 @@ function partition(A, left, right){
     var pivot = A[left];
     var i = left;
     var j;
+    var temp;
 
     // Store the subarray in the binary tree
     // this procedure is not necessary for quicksort
@@ -67,7 +68,13 @@ function partition(A, left, right){
 
             i = i + 1;
         }
-        else { console.log("A[j] is greater than the pivot value, so no values were swapped."); }
+        else { 
+            console.log("A[j] is greater than the pivot value, so no values were swapped.");
+            console.log("A[j] is: " + A[j] + " and the pivot is: " + pivot);
+            console.log("The type of A[j] is: " + typeof(A[j]) + " and the type of pivot is: " + typeof(pivot));
+
+
+        }
 
         console.log("i is now: " + i);
         console.log("-----------------");

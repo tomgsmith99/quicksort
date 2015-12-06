@@ -29,14 +29,17 @@ function randomize() {
 function run() {
 
     binaryTree = new BinaryTree("quickSortCanvas", 10, 120);
+    jsPlumb.empty(binaryTree.divID);
+
     
     A =[];
     var i;
     var id;
+    qsCount = 0;
     
     for (i=0; i<=9; i++){
         id = "value" + i;
-        A.push(document.getElementById(id).value);
+        A.push(parseInt(document.getElementById(id).value));
     }
     
     console.log("The main array is now: " + A);
