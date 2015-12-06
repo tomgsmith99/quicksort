@@ -24,17 +24,18 @@ BinaryTree.prototype.associate = function(parent, child) {
 };
 
 BinaryTree.prototype.build = function() {
+    var i, j, z;
+    var leaf, pleaf;
+    
     // find each leaf's parent and children
     console.log("-----STARTING THE buildTree() function------");
 
-    leaves = this.leaves;
-
     // I'm going backward through the list; otherwise I would use forEach
-    for (i = leaves.length - 1; i > 0; i--) {
+    for (i = this.leaves.length - 1; i > 0; i--) {
 
         j = i - 1;
 
-        leaf = leaves[i];
+        leaf = this.leaves[i];
 
         console.log("the child value is: " + leaf.preArray.data);
 
@@ -43,7 +44,7 @@ BinaryTree.prototype.build = function() {
         while (leaf.hasParent() === false && z < 10000) {
             z++;
             var child = leaf.postArray.data;
-            pleaf = leaves[j];
+            pleaf = this.leaves[j];
             var potParent = pleaf.postArray.data;
 
             if (Array.isArray(potParent)) {
@@ -196,13 +197,15 @@ BinaryTree.prototype.flatten = function() {
     });
 
     // Second, make sure that parent/child pairs appear in proper order
-    for (i = 0; i < (flatArray.length - 1); i++ ) {
-        if (flatArray[i].pivotValue === flatArray[i+1].pivotValue) {
-            if (flatArray[i].leftChild === flatArray[i+1]) {
+    for (i = (flatArray.length - 1); i > 0; i-- ) {
+        j = i - 1;
+        while (j >= 0 && (flatArray[i].pivotValue === flatArray[j].pivotValue)) {
+            if (flatArray[i] === flatArray[j].leftChild) {
                 temp = flatArray[i];
-                flatArray[i] = flatArray[i+1];
-                flatArray[i + 1] = temp;
+                flatArray[i] = flatArray[j];
+                flatArray[j] = temp;
             }
+            j--;
         }
     }
 
@@ -229,26 +232,17 @@ BinaryTree.prototype.getLeaves = function() { return this.leaves; };
 BinaryTree.prototype.getTotal = function() { return this.leaves.length; };
 
 BinaryTree.prototype.getXpos = function(leaf){
+    console.log("getting the xpos for: " + leaf.preArray.data);
     var prevLeaf;
     var xpos;
     
     prevLeaf = this.flatArray[leaf.hIndex - 1];
     prevLeaf.setWidth(); // this needs to happen here so that the div
                          // can get added to the DOM and measured.
-//    if (prevLeaf.isRoot()) { return (prevLeaf.xpos + 50); }
-//    else {
-//        if (prevLeaf.isSingleton() && prevLeaf.isLeftChild()) {
-//            xpos = prevLeaf.xpos + (prevLeaf.width / 2);
-//        }
-//        else if (leaf.isSingleton() && leaf.isRightChild()) {
-//            var cell = prevLeaf.getLastCell();
-//            xpos = 
-//                    prevLeaf.xpos + 
-//                    prevLeaf.width - (cell.getWidth() / 2);
-//        }
-//        else { xpos = prevLeaf.xpos + prevLeaf.width; }
-//    }
 
+    // Now that the pivot value is staying in the parent partition, this
+    // logic could probably be significantly reduced. But, I spent so much time
+    // on it I can't bring myself to trash it just yet.
     if (prevLeaf.isSingleton() && prevLeaf.isLeftChild()) {
         xpos = prevLeaf.xpos + (prevLeaf.width / 2);
     }
@@ -258,7 +252,7 @@ BinaryTree.prototype.getXpos = function(leaf){
                 prevLeaf.xpos + 
                 prevLeaf.width - (cell.getWidth() / 2);
     }
-    else { xpos = prevLeaf.xpos + prevLeaf.width; }
+    else { xpos = prevLeaf.xpos + (prevLeaf.width / 2); }
 
     return xpos;
 };
@@ -385,18 +379,6 @@ Leaf.prototype.setChild = function (child) {
         }
         
     }
-/*
-    if (this.hasLeftChild()) {
-        this.rightChild = this.leftChild;
-        this.rightChild.binPos = "right";
-        this.leftChild = child;
-        child.binPos = "left";
-    }
-    else {
-        this.leftChild = child;
-        child.binPos = "left";
-    }
-    */
 };
 
 Leaf.prototype.setArray = function(type, array) {
@@ -453,7 +435,7 @@ Leaf.prototype.show = function() {
     console.log("my preArray is: " + this.preArray.data);
     console.log("my postArray is: " + this.postArray.data);
     console.log("my length is: " + this.length);
-    console.log("my pivot value is: " + leaf.pivotValue);
+    console.log("my pivot value is: " + this.pivotValue);
 
     if (this.parent !== null) {
         console.log("my parent's preArray is: " + this.parent.preArray.data);
