@@ -1,12 +1,19 @@
 
-function getQSvaluesForm() {
+function renderUI(divID, numFields) {
+    var jqDivID = "#" + divID;
+    $(jqDivID).append(getQSvaluesForm(numFields));
+
+};
+
+
+function getQSvaluesForm(numFields) {
     var thisform = "<form id='qsArray' name='qsArray'>";
-    var name = "";
+    var id = "";
     var i;
 
-    for (i = 0; i <= 9; i++) {
+    for (i = 0; i <= (numFields - 1); i++) {
         name = "value" + i;
-        thisform += "<input class='input' type='text' size='2' id='" + name + "'>";
+        thisform += "<input class='input' type='text' size='2' id='" + id + "'>";
     }
     thisform += "<button type = 'button' id = 'submitValues' onclick='run()'>run</button>";
     thisform += "<button type = 'button' id = 'randButton' onclick='randomize()'>randomize</button>";
@@ -31,8 +38,7 @@ function run() {
     binaryTree = new BinaryTree("quickSortCanvas", 10, 120);
     jsPlumb.empty(binaryTree.divID);
 
-    
-    A =[];
+    var A =[];
     var i;
     var id;
     qsCount = 0;
@@ -46,6 +52,6 @@ function run() {
     quickSort(A, 0, (A.length - 1));
     console.log("---------COMPLETE-----------");
     console.log("The sorted array is: " + A);
-    binaryTree.display();
+    binaryTree.display(A);
 
 }

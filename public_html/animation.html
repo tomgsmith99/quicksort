@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>Tom's Quicksort</title>
+        <title>tomgsmith99 Quicksort - animation</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -11,53 +11,26 @@
         <script src="scripts/jsplumb/jsPlumb-2.0.4.js"></script>
 
         <script src='scripts/tom/binaryTree.js' type ='text/javascript'></script>
-        <script src="scripts/tom/submissionForm.js" type="text/javascript"></script>
+        <script src="scripts/tom/qsUI.js" type="text/javascript"></script>
         <script src="scripts/tom/quicksort.js" type="text/javascript"></script>
+        <script src="scripts/tom/qsDemo.js" type="text/javascript"></script>
 
         <script type ="text/javascript">
 
-            // initialize binaryTree object with divID and x, y coords
-            var binaryTree = new BinaryTree("quickSortCanvas", 10, 120);
-            var qsCount = 0;
-
             window.onload = function () {
 
-               var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
+                var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
+                var canvasDivID = "quickSortCanvas";
+                var x = 10;
+                var y = 120;
                 
-               // var A = [43,47,44,47,54,72,99,81,9,77];
+                var uiDivID = "topnavRight";
+                var numFields = 10;
+
+                qsDemo(A, canvasDivID, x, y);
                 
-                // var A = [33, 4, 10, 16, 60, 28, 13, 86, 52, 43];
-                
-                // var A = [22,3,5,68,70,92,93,95,96,99];
+                renderUI(uiDivID, numFields);
 
-                // var A = [42,71,97,66,0,39,14,19,57,19];
-                
-               // var A = [0,0,0,0,0,0,0,0,0,0];
-               
-               var A = [27,64,33,2,89,58,83,5,32,61];
-
-                quickSort(A, 0, (A.length - 1));
-                
-                binaryTree.sortedInts = A;
-                
-                console.log("----------- COMPLETE! --------------------------");
-                console.log("The sorted array is: " + binaryTree.sortedInts);
-
-                binaryTree.showValues();
-
-                binaryTree.build();
-
-                binaryTree.calculateLeafDepths();
-
-                binaryTree.flatten();
-
-                binaryTree.show();
-
-                binaryTree.buildHTML();
-                
-                binaryTree.drawLines();
-                
-                $("#topnavRight").append(getQSvaluesForm());
             };
 
         </script>

@@ -98,7 +98,7 @@ BinaryTree.prototype.calculateLeafDepths = function() {
     this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
 };
 
-BinaryTree.prototype.display = function() {
+BinaryTree.prototype.display = function(A) {
     this.sortedInts = A;
 
     this.showValues();
