@@ -8,6 +8,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <script>
+            function run() {
+                var x = document.getElementById("qsValues").elements.length;
+                console.log("there are " + x + " elements in the form.");
+                
+                // var thisArray = document.getElementById("qsArray").elements[];
+            }
+
+        </script>
     </head>
     <body>
 
@@ -15,32 +24,22 @@
         <div class = 'node' id = 'leaf_1' style = 'left:10.5px;top:90px;'><div class = 'array' id = 'leaf_1_pre'><div class='cell' id='leaf_1_pre_0' style='top:90px;'>4</div><div class='cell' id='leaf_1_pre_1' style='top:90px;'>6</div><div class='cell' id='leaf_1_pre_2' style='top:90px;'>8</div></div></div>
 -->
         
-<div class = 'node' id = 'leaf_1' style = 'left:25px;top:25px;'>
-    <div class = 'array' id = 'leaf_1_pre'>
-        <div class='cell' id='leaf_1_pre_0'>4</div>
-        <div class='cell' id='leaf_1_pre_1'>6</div>
-        <div class='cell' id='leaf_1_pre_2'>8</div>
-    </div>
-</div>
+<div id ="formTest">
+    
 
-<div class = 'node' id = 'leaf_2' style = 'left:25px;top:150px;'>
-    <div class = 'array' id = 'leaf_2_pre'>
-        <div class='cell' id='leaf_2_pre_0'>4</div>
-        <div class='cell' id='leaf_2_pre_1'>6</div>
-    </div>
-</div>
+    
+        <form id='qsArray' name='qsArray'>
+<!--            <fieldset name ="qsValues">-->
+       <input class='input' type='text' size='2' id='id1' name = 'qsValues'>
+       <input class='input' type='text' size='2' id='id2' name = 'qsValues'>
+       <input class='input' type='text' size='2' id='id3' name = 'qsValues'>
+<!--            </fieldset>-->
 
-<!-------------------------->
+        <button type = 'button' id = 'submitValues' onclick='run()'>run</button>
 
-<div class = 'node' id = 'leaf_3' style = 'left:25px;top:300px;'>
-        <div class='cell' id='leaf_3_pre_0'>4</div>
-        <div class='cell' id='leaf_3_pre_1'>6</div>
-        <div class='cell' id='leaf_3_pre_2'>8</div>
-</div>
+        </form>
 
-<div class = 'node' id = 'leaf_4' style = 'left:25px;top:400px;'>
-        <div class='cell' id='leaf_4_pre_0'>4</div>
-        <div class='cell' id='leaf_4_pre_1'>6</div>
+    
 </div>
         
     </body>

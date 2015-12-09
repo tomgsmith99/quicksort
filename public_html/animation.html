@@ -17,19 +17,35 @@
 
         <script type ="text/javascript">
 
+                var config = {
+                    A: [17, 35, 12, 32, 6, 99, 4, 8, 43, 50],
+                    canvasDivID: "quickSortCanvas",
+                    x: 10,
+                    y: 120,
+                
+                    uiDivID: "topnavRight",
+                    numFields: 10
+                };
+                
             window.onload = function () {
-
-                var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
-                var canvasDivID = "quickSortCanvas";
-                var x = 10;
-                var y = 120;
                 
-                var uiDivID = "topnavRight";
-                var numFields = 10;
 
-                qsDemo(A, canvasDivID, x, y);
+
+//                var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
+//                var canvasDivID = "quickSortCanvas";
+//                var x = 10;
+//                var y = 120;
+//                
+//                var uiDivID = "topnavRight";
+//                var numFields = 10;
+
+//                qsDemo(A, canvasDivID, x, y);
+//                
+//                renderUI(uiDivID, numFields);
                 
-                renderUI(uiDivID, numFields);
+                qsDemo(config.A, config.canvasDivID, config.x, config.y);
+                
+                renderUI(config.uiDivID, config.numFields);
 
             };
 
