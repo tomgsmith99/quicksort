@@ -380,12 +380,6 @@ BinaryTree.prototype.getXpos = function(leaf){
     return Math.round(xpos);
 };
 
-BinaryTree.prototype.setUIparams = function (x, y, divID) {
-    this.xpos = x; // starting with a 10px buffer from left side of screen
-    this.ypos = y;
-    this.divID = divID;
-    this.divIDjq = "#" + this.divID;
-};
 BinaryTree.prototype.showProperties = function() {
     console.log("-------------- STARTING THE show() function ---------------");
     this.leaves.forEach(function(leaf) { leaf.show(); });
