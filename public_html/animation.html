@@ -18,15 +18,16 @@
         <script type ="text/javascript">
 
             var qsDemoSet = new QSDemoSet();
-                qsDemoSet.canvasDivID = "quickSortCanvas";
+                qsDemoSet.setCanvasID("quickSortCanvas");
+                qsDemoSet.setFormID("topnavRight");
+
                 qsDemoSet.canvasX = 10;
                 qsDemoSet.canvasY = 120;
-                qsDemoSet.formDivID = "topnavRight";
-                qsDemoSet.renderForm();
-
-            var numFields = 10;
+                qsDemoSet.numFields = 10;
 
             window.onload = function () {
+                
+                qsDemoSet.renderForm();
 
                 var initialArray = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
                 

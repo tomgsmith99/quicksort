@@ -38,21 +38,18 @@ QSDemoSet.prototype.renderForm = function (n) {
 
     thisform += "<button type = 'button' id = 'randButton' onclick='randomize()'>randomize</button>";
 
-    $(this.formJQID).append(thisform);
+    $(this.formDivIDjq).append(thisform);
+
 };
 
-QSDemoSet.prototype.setCanvasParams = function (canvasDivID, x, y) {
-    this.canvasDivID = canvasDivID;
-    this.canvasDivIDjq = "#" + canvasDivID;
-
-    this.canvasX = x;
-    this.canvasY = y;
+QSDemoSet.prototype.setCanvasID = function (divID) {
+    this.canvasDivID = divID;
+    this.canvasDivIDjq = "#" + this.canvasDivID;
 };
 
-QSDemoSet.prototype.setFormParams = function (formDivID, n) {
-    this.formDivID = formDivID;
-    this.formJQID = "#" + this.formDivID;
-    this.numFields = n;
+QSDemoSet.prototype.setFormID = function (divID) {
+    this.formDivID = divID;
+    this.formDivIDjq = "#" + divID;
 };
 
 function randomize () {
