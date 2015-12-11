@@ -34,6 +34,11 @@ BinaryTree.prototype.quickSort = function (A, left, right) {
         this.quickSort (A, left, (pivot-1));
         this.quickSort (A, (pivot+1), right);
     }
+    else {
+        var leaf = new Leaf();
+        this.addLeaf(leaf);
+        leaf.setArray("pre", A.slice(left, (left)));
+    }
 };
 
 BinaryTree.prototype.partition = function (A, left, right){
