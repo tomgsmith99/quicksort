@@ -7,10 +7,6 @@ var BinaryTree = function(inputArray) {
     this.flatArray = []; // array of leaves, ordered by horizontal position
                             // in the tree
     this.html = "";
-//    this.xpos = x; // starting with a 10px buffer from left side of screen
-//    this.ypos = y;
-//    this.divID = divID;
-//    this.divIDjq = "#" + this.divID;
 };
 
 BinaryTree.prototype.runQuickSort = function() {
@@ -133,7 +129,16 @@ BinaryTree.prototype.associate = function(parent, child) {
     console.log("---------------");
 };
 
+
 BinaryTree.prototype.build = function() {
+    this.connectLeaves(); // associates parents with children
+    this.calculateLeafDepths();
+    this.flatten(); // calculates horizontal positions of leaves
+    this.showProperties(); // displays all btree/leaf properties in the console
+};
+
+
+BinaryTree.prototype.connectLeaves = function() {
     var i, j, z;
     var leaf, pleaf;
     
@@ -169,13 +174,6 @@ BinaryTree.prototype.build = function() {
             else { j = j - 1; }
         }
     }
-};
-
-BinaryTree.prototype.buildTree = function() {
-    this.build(); // associates parents with children
-    this.calculateLeafDepths();
-    this.flatten(); // calculates horizontal positions of leaves
-    this.show(); // displays all btree/leaf properties in the console
 };
 
 BinaryTree.prototype.render = function(divIDjq, x, y) {
@@ -388,7 +386,7 @@ BinaryTree.prototype.setUIparams = function (x, y, divID) {
     this.divID = divID;
     this.divIDjq = "#" + this.divID;
 };
-BinaryTree.prototype.show = function() {
+BinaryTree.prototype.showProperties = function() {
     console.log("-------------- STARTING THE show() function ---------------");
     this.leaves.forEach(function(leaf) { leaf.show(); });
 };
