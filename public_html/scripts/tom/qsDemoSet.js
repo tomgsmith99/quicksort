@@ -13,7 +13,7 @@ QSDemoSet.prototype.render = function (btree) {
     var divIDjq = "#" + this.canvasDivID;
     $(divIDjq).empty();
 
-    btree.render(divIDjq, this.canvasX, this.canvasY);
+    btree.render(this.canvasDivID, divIDjq, this.canvasX, this.canvasY);
 };
 
 var QSDemo = function(dataSet) {

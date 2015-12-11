@@ -9,39 +9,80 @@ var BinaryTree = function(inputArray) {
     this.html = "";
 };
 
-BinaryTree.prototype.runQuickSort = function() {
-    this.quickSort(this.sortedInts, 0, (this.sortedInts.length - 1));
+
+BinaryTree.prototype.addLeaf = function(leaf) {
+    this.total = this.leaves.push(leaf);
+    leaf.setIndex(this.total - 1);
 };
 
-BinaryTree.prototype.quickSort = function (A, left, right) {
-    var pivot;
+BinaryTree.prototype.associate = function(parent, child) {
+    child.setParent(parent);
+    parent.setChild(child);
 
-    this.qsCount++;
+    console.log(child.preArray.data + " is a member of " + parent.preArray.data);
+    console.log("---------------");
+};
 
-    if (this.qsCount > 100) { throw new Error("too many qs loops"); }
-    console.log("----------QSBEGIN----------");
-    console.log("Starting a qs function.");
-    console.log("Iteration number: " + this.qsCount);
-    console.log("The left index is: " + left);
-    console.log("The right index is: " + right);
+BinaryTree.prototype.build = function() {
+    this.connectLeaves(); // associates parents with children
+    this.calculateLeafDepths();
+    this.flatten(); // calculates horizontal positions of leaves
+    this.showProperties(); // displays all btree/leaf properties in the console
+};
 
-    if (left < right) {
-        console.log("left is < right.");
-        console.log("starting the partition function.");
-        pivot = this.partition(A, left, right);
-        console.log("partition function complete.");
-        console.log("result of partition function - pivot index is: " + pivot);
-        this.quickSort (A, left, (pivot-1));
-        this.quickSort (A, (pivot+1), right);
+BinaryTree.prototype.calculateLeafDepths = function() {
+    console.log("------STARTING THE calculateLeafDepths() function ------");
+
+    this.leaves.forEach(function(leaf) {
+        console.log("my index is: " + leaf.index);
+        console.log("my binPos is: " + leaf.binPos);
+        
+        if (leaf.index === 0) { leaf.depth = 0; }
+        else { leaf.depth = leaf.parent.depth + 1; }
+        
+        console.log("Leaf is: " + leaf.preArray.data + " Depth is: " + leaf.depth);
+        console.log("------------");
+    });
+    
+    this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
+};
+
+BinaryTree.prototype.connectLeaves = function() {
+    var i, j, z;
+    var leaf, pleaf;
+    
+    // find each leaf's parent and children
+    console.log("-----STARTING THE buildTree() function------");
+
+    // I'm going backward through the list; otherwise I would use forEach
+    for (i = this.leaves.length - 1; i > 0; i--) {
+
+        j = i - 1;
+
+        leaf = this.leaves[i];
+
+        console.log("the child value is: " + leaf.preArray.data);
+
+        z = 0;
+
+        while (leaf.hasParent() === false && z < 10000) {
+            z++;
+            var child = leaf.postArray.data;
+            pleaf = this.leaves[j];
+            var potParent = pleaf.postArray.data;
+
+            if (Array.isArray(potParent)) {
+                console.log("looking for " + child + " in " + potParent);
+                var item;
+                if (child.every(item => potParent.indexOf(item) !== -1)) {
+                    this.associate(pleaf, leaf);
+                    break;
+                }
+                else { j = j - 1; }
+            }
+            else { j = j - 1; }
+        }
     }
-    else if (left === right) { // Note: this clause is not needed for qs!
-        console.log("Nope. This partition is a singleton: " + A[left]);
-        var leaf = new Leaf();
-        leaf.setArray("pre", A.slice(left, left+1));
-        leaf.setArray("post", A.slice(left, left+1));
-        this.addLeaf(leaf);
-    }
-    else { console.log("right > left, so we are done!"); } // also unnecessary
 };
 
 BinaryTree.prototype.partition = function (A, left, right){
@@ -113,70 +154,38 @@ BinaryTree.prototype.partition = function (A, left, right){
     return retVal;
 };
 
-function printSubArray(A, l, r) { console.log(A.slice(l, r+1)); }
+BinaryTree.prototype.quickSort = function (A, left, right) {
+    var pivot;
 
+    this.qsCount++;
 
-BinaryTree.prototype.addLeaf = function(leaf) {
-    this.total = this.leaves.push(leaf);
-    leaf.setIndex(this.total - 1);
-};
+    if (this.qsCount > 100) { throw new Error("too many qs loops"); }
+    console.log("----------QSBEGIN----------");
+    console.log("Starting a qs function.");
+    console.log("Iteration number: " + this.qsCount);
+    console.log("The left index is: " + left);
+    console.log("The right index is: " + right);
 
-BinaryTree.prototype.associate = function(parent, child) {
-    child.setParent(parent);
-    parent.setChild(child);
-
-    console.log(child.preArray.data + " is a member of " + parent.preArray.data);
-    console.log("---------------");
-};
-
-
-BinaryTree.prototype.build = function() {
-    this.connectLeaves(); // associates parents with children
-    this.calculateLeafDepths();
-    this.flatten(); // calculates horizontal positions of leaves
-    this.showProperties(); // displays all btree/leaf properties in the console
-};
-
-
-BinaryTree.prototype.connectLeaves = function() {
-    var i, j, z;
-    var leaf, pleaf;
-    
-    // find each leaf's parent and children
-    console.log("-----STARTING THE buildTree() function------");
-
-    // I'm going backward through the list; otherwise I would use forEach
-    for (i = this.leaves.length - 1; i > 0; i--) {
-
-        j = i - 1;
-
-        leaf = this.leaves[i];
-
-        console.log("the child value is: " + leaf.preArray.data);
-
-        z = 0;
-
-        while (leaf.hasParent() === false && z < 10000) {
-            z++;
-            var child = leaf.postArray.data;
-            pleaf = this.leaves[j];
-            var potParent = pleaf.postArray.data;
-
-            if (Array.isArray(potParent)) {
-                console.log("looking for " + child + " in " + potParent);
-                var item;
-                if (child.every(item => potParent.indexOf(item) !== -1)) {
-                    this.associate(pleaf, leaf);
-                    break;
-                }
-                else { j = j - 1; }
-            }
-            else { j = j - 1; }
-        }
+    if (left < right) {
+        console.log("left is < right.");
+        console.log("starting the partition function.");
+        pivot = this.partition(A, left, right);
+        console.log("partition function complete.");
+        console.log("result of partition function - pivot index is: " + pivot);
+        this.quickSort (A, left, (pivot-1));
+        this.quickSort (A, (pivot+1), right);
     }
+    else if (left === right) { // Note: this clause is not needed for qs!
+        console.log("Nope. This partition is a singleton: " + A[left]);
+        var leaf = new Leaf();
+        leaf.setArray("pre", A.slice(left, left+1));
+        leaf.setArray("post", A.slice(left, left+1));
+        this.addLeaf(leaf);
+    }
+    else { console.log("right > left, so we are done!"); } // also unnecessary
 };
 
-BinaryTree.prototype.render = function(divIDjq, x, y) {
+BinaryTree.prototype.render = function(divID, divIDjq, x, y) {
     console.log("------------------------------------------");
     console.log("-----------BUILDING THE HTML--------------");
 
@@ -189,51 +198,22 @@ BinaryTree.prototype.render = function(divIDjq, x, y) {
         leaf.setHTML(y);
         console.log("-----------------------------------------");
 
-        console.log("the div id is: " + this.divIDjq);
         $(divIDjq).append(leaf.html);
 
     }, this);
+
+    this.drawLines(divID);
+
 };
 
-BinaryTree.prototype.calculateLeafDepths = function() {
-    console.log("------STARTING THE calculateLeafDepths() function ------");
-
-    this.leaves.forEach(function(leaf) {
-        console.log("my index is: " + leaf.index);
-        console.log("my binPos is: " + leaf.binPos);
-        
-        if (leaf.index === 0) { leaf.depth = 0; }
-        else { leaf.depth = leaf.parent.depth + 1; }
-        
-        console.log("Leaf is: " + leaf.preArray.data + " Depth is: " + leaf.depth);
-        console.log("------------");
-    });
-    
-    this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
+BinaryTree.prototype.runQuickSort = function() {
+    this.quickSort(this.sortedInts, 0, (this.sortedInts.length - 1));
 };
 
-BinaryTree.prototype.display = function() {
-
-    this.showValues();
-
-    this.build();
-
-    this.calculateLeafDepths();
-
-    this.flatten();
-
-    this.show();
-
-    this.buildHTML();
-
-    this.drawLines();
-};
-
-BinaryTree.prototype.drawLines = function() {
+BinaryTree.prototype.drawLines = function(divID) {
     /* global jsPlumb */
     var leaves = this.leaves;
-    var divID = this.divID;
-    
+
     jsPlumb.ready(function() {
 
         // jsPlumb.repaintEverything();
@@ -280,8 +260,7 @@ BinaryTree.prototype.drawLines = function() {
             }
         });
     }, this);
-    
-    
+
     function drawLine(source, target, anchorSrc, anchorDest) {
         jsPlumb.connect({
             anchors:[anchorSrc, anchorDest],
@@ -662,3 +641,5 @@ Subarray.prototype.getPivotCell = function() {
 Subarray.prototype.getPivotDivID = function() {
     return this.getPivotCell().divID;
 };
+
+function printSubArray(A, l, r) { console.log(A.slice(l, r+1)); }
