@@ -4,13 +4,26 @@ var BinaryTree = function(inputArray) {
     this.qsCount = 0; // a counter to stop runaway while looops
     
     this.leaves = []; // array of leaves, in the order in which they were created
-//    this.flatArray = []; // array of leaves, ordered by horizontal position
-//                            // in the tree
-//    this.html = "";
+    this.flatArray = []; // array of leaves, ordered by horizontal position
+                            // in the tree
+    this.html = "";
 //    this.xpos = x; // starting with a 10px buffer from left side of screen
 //    this.ypos = y;
 //    this.divID = divID;
 //    this.divIDjq = "#" + this.divID;
+};
+
+BinaryTree.prototype.render = function(divIDjq, x, y) {
+    // this.divID = divID;
+    this.divIDjq = divIDjq;
+    this.xpos = x;
+    this.ypos = y;
+    
+    this.buildHTML();
+};
+
+BinaryTree.prototype.runQuickSort = function() {
+    this.quickSort(this.sortedInts, 0, (this.sortedInts.length - 1));
 };
 
 BinaryTree.prototype.quickSort = function (A, left, right) {
@@ -34,11 +47,14 @@ BinaryTree.prototype.quickSort = function (A, left, right) {
         this.quickSort (A, left, (pivot-1));
         this.quickSort (A, (pivot+1), right);
     }
-    else {
+    else if (left === right) { // Note: this clause is not needed for qs!
+        console.log("Nope. This partition is a singleton: " + A[left]);
         var leaf = new Leaf();
+        leaf.setArray("pre", A.slice(left, left+1));
+        leaf.setArray("post", A.slice(left, left+1));
         this.addLeaf(leaf);
-        leaf.setArray("pre", A.slice(left, (left)));
     }
+    else { console.log("right > left, so we are done!"); } // also unnecessary
 };
 
 BinaryTree.prototype.partition = function (A, left, right){
@@ -100,7 +116,7 @@ BinaryTree.prototype.partition = function (A, left, right){
 
     // Store the subarray in the binary tree
     // this procedure is not necessary for quicksort
-    // leaf.setArray("post", A.slice(left, (right + 1)));
+    leaf.setArray("post", A.slice(left, (right + 1)));
 
     // console.log("The full array is now: " + A.join(' '));
 
@@ -164,11 +180,16 @@ BinaryTree.prototype.build = function() {
     }
 };
 
+BinaryTree.prototype.buildTree = function() {
+    this.build(); // associates parents with children
+    this.calculateLeafDepths();
+    this.flatten(); // calculates horizontal positions of leaves
+    this.show(); // displays all btree/leaf properties in the console
+};
+
 BinaryTree.prototype.buildHTML = function() {
     console.log("------------------------------------------");
     console.log("-----------BUILDING THE HTML--------------");
-
-    $(this.divIDjq).empty();
 
     this.flatArray.forEach(function(leaf) {
         console.log("the leaf hIndex is: " + leaf.hIndex);
@@ -179,6 +200,7 @@ BinaryTree.prototype.buildHTML = function() {
         leaf.setHTML(this.ypos);
         console.log("-----------------------------------------");
 
+        console.log("the div id is: " + this.divIDjq);
         $(this.divIDjq).append(leaf.html);
 
     }, this);
@@ -202,21 +224,20 @@ BinaryTree.prototype.calculateLeafDepths = function() {
 };
 
 BinaryTree.prototype.display = function() {
-    // this.sortedInts = A;
 
     this.showValues();
 
-//    this.build();
-//
-//    this.calculateLeafDepths();
-//
-//    this.flatten();
-//
-//    this.show();
-//
-//    this.buildHTML();
-//
-//    this.drawLines();
+    this.build();
+
+    this.calculateLeafDepths();
+
+    this.flatten();
+
+    this.show();
+
+    this.buildHTML();
+
+    this.drawLines();
 };
 
 BinaryTree.prototype.drawLines = function() {
@@ -370,6 +391,12 @@ BinaryTree.prototype.getXpos = function(leaf){
     return Math.round(xpos);
 };
 
+BinaryTree.prototype.setUIparams = function (x, y, divID) {
+    this.xpos = x; // starting with a 10px buffer from left side of screen
+    this.ypos = y;
+    this.divID = divID;
+    this.divIDjq = "#" + this.divID;
+};
 BinaryTree.prototype.show = function() {
     console.log("-------------- STARTING THE show() function ---------------");
     this.leaves.forEach(function(leaf) { leaf.show(); });

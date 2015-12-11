@@ -18,24 +18,28 @@
         <script type ="text/javascript">
 
             var qsDemoSet = new QSDemoSet();
+                qsDemoSet.canvasDivID = "quickSortCanvas";
+                qsDemoSet.canvasX = 10;
+                qsDemoSet.canvasY = 120;
+                qsDemoSet.formDivID = "topnavRight";
+                qsDemoSet.renderForm();
+
+            
             var numFields = 10;
 
             window.onload = function () {
 
-                var config = {
-                    canvasDivID: "quickSortCanvas",
-                    x: 10,
-                    y: 120,
-                
-                    formDivID: "topnavRight"
-                };
-                
                 var initialArray = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
-                qsDemoSet.addDemo(initialArray);
                 
-                qsDemoSet.setCanvasParams(config.canvasDivID, config.x, config.y);
-                qsDemoSet.setFormParams(config.formDivID, numFields);
-                qsDemoSet.renderForm();
+                var binaryTree = new BinaryTree(initialArray);
+                binaryTree.runQuickSort();
+                binaryTree.buildTree();
+                
+                qsDemoSet.trees.push(binaryTree);
+                qsDemoSet.render(binaryTree);
+//                
+//                qsDemoSet.setCanvasParams(config.canvasDivID, config.x, config.y);
+//                qsDemoSet.setFormParams(config.formDivID, numFields);
 
 
 //                var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
