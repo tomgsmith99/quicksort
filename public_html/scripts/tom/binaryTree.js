@@ -13,15 +13,6 @@ var BinaryTree = function(inputArray) {
 //    this.divIDjq = "#" + this.divID;
 };
 
-BinaryTree.prototype.render = function(divIDjq, x, y) {
-    // this.divID = divID;
-    this.divIDjq = divIDjq;
-    this.xpos = x;
-    this.ypos = y;
-    
-    this.buildHTML();
-};
-
 BinaryTree.prototype.runQuickSort = function() {
     this.quickSort(this.sortedInts, 0, (this.sortedInts.length - 1));
 };
@@ -187,21 +178,21 @@ BinaryTree.prototype.buildTree = function() {
     this.show(); // displays all btree/leaf properties in the console
 };
 
-BinaryTree.prototype.buildHTML = function() {
+BinaryTree.prototype.render = function(divIDjq, x, y) {
     console.log("------------------------------------------");
     console.log("-----------BUILDING THE HTML--------------");
 
     this.flatArray.forEach(function(leaf) {
         console.log("the leaf hIndex is: " + leaf.hIndex);
         
-        if (leaf.hIndex === 0) { leaf.xpos = this.xpos; }
+        if (leaf.hIndex === 0) { leaf.xpos = x; }
         else { leaf.xpos = this.getXpos(leaf); } // careful! this = binaryTree
         
-        leaf.setHTML(this.ypos);
+        leaf.setHTML(y);
         console.log("-----------------------------------------");
 
         console.log("the div id is: " + this.divIDjq);
-        $(this.divIDjq).append(leaf.html);
+        $(divIDjq).append(leaf.html);
 
     }, this);
 };
