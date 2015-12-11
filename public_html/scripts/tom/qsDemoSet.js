@@ -5,15 +5,13 @@ var QSDemoSet = function() {
     this.canvasX;
     this.canvasY;
     this.formDivID;
-//    jsPlumb.empty(binaryTree.divID);
-
 };
 
 QSDemoSet.prototype.render = function (btree) {
-    var divIDjq = "#" + this.canvasDivID;
-    $(divIDjq).empty();
-
-    btree.render(this.canvasDivID, divIDjq, this.canvasX, this.canvasY);
+    /* global jsPlumb */
+    jsPlumb.empty(this.canvasDivID);
+    $(this.canvasDivIDjq).empty();
+    btree.render(this.canvasDivID, this.canvasDivIDjq, this.canvasX, this.canvasY);
 };
 
 QSDemoSet.prototype.renderForm = function (n) {
@@ -42,6 +40,15 @@ QSDemoSet.prototype.renderForm = function (n) {
 
 };
 
+QSDemoSet.prototype.run = function (dataSet) {
+    var binaryTree = new BinaryTree(dataSet);
+    binaryTree.runQuickSort();
+    binaryTree.build();
+
+    this.trees.push(binaryTree);
+    this.render(binaryTree);
+};
+
 QSDemoSet.prototype.setCanvasID = function (divID) {
     this.canvasDivID = divID;
     this.canvasDivIDjq = "#" + this.canvasDivID;
@@ -53,11 +60,13 @@ QSDemoSet.prototype.setFormID = function (divID) {
 };
 
 function randomize () {
-    /* global numFields */
     var i;
     var id;
     
-    for (i=0; i<=(numFields-1); i++){
+    var inputArray = $(".inputVals").toArray();
+    var length = inputArray.length;
+
+    for (i=0; i<=(length-1); i++){
         id = "value" + i;
         document.getElementById(id).value = Math.floor(Math.random() * 100);
     }
@@ -73,30 +82,5 @@ function run () {
 
     console.log("the data set is: " + dataSet);
 
-    qsDemoSet.addDemo(dataSet);
-
-//    binaryTree = new BinaryTree("quickSortCanvas", 10, 120);
-//    jsPlumb.empty(binaryTree.divID);
-//
-//    // var numFields = config.numFields;
-//    var A =[];
-//    var i;
-//    var id;
-//    qsCount = 0;
-//
-//    
-//    for (i=0; i<= (config.numFields - 1); i++){
-//        id = "value" + i;
-//        A.push(parseInt(document.getElementById(id).value));
-//    }
-//    
-//    console.log("The main array is now: " + A);
-//    quickSort(A, 0, (A.length - 1));
-//    console.log("---------COMPLETE-----------");
-//    console.log("The sorted array is: " + A);
-//    binaryTree.display(A);
-//    
-    
-
-
+    qsDemoSet.run(dataSet);
 };
