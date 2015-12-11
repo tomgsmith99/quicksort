@@ -13,22 +13,29 @@
         <script src='scripts/tom/binaryTree.js' type ='text/javascript'></script>
         <script src="scripts/tom/qsUI.js" type="text/javascript"></script>
         <script src="scripts/tom/quicksort.js" type="text/javascript"></script>
-        <script src="scripts/tom/qsDemo.js" type="text/javascript"></script>
+        <script src="scripts/tom/qsDemoSet.js" type="text/javascript"></script>
 
         <script type ="text/javascript">
 
+            var qsDemoSet = new QSDemoSet();
+            var numFields = 10;
+
+            window.onload = function () {
+
                 var config = {
-                    A: [17, 35, 12, 32, 6, 99, 4, 8, 43, 50],
                     canvasDivID: "quickSortCanvas",
                     x: 10,
                     y: 120,
                 
-                    uiDivID: "topnavRight",
-                    numFields: 10
+                    formDivID: "topnavRight"
                 };
                 
-            window.onload = function () {
+                var initialArray = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
+                qsDemoSet.addDemo(initialArray);
                 
+                qsDemoSet.setCanvasParams(config.canvasDivID, config.x, config.y);
+                qsDemoSet.setFormParams(config.formDivID, numFields);
+                qsDemoSet.renderForm();
 
 
 //                var A = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
@@ -43,9 +50,9 @@
 //                
 //                renderUI(uiDivID, numFields);
                 
-                qsDemo(config.A, config.canvasDivID, config.x, config.y);
+                // qsDemo(config.A, config.canvasDivID, config.x, config.y);
                 
-                renderUI(config.uiDivID, config.numFields);
+                // renderUI(config.uiDivID, config.numFields);
 
             };
 
