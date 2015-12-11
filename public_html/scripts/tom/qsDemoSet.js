@@ -16,60 +16,6 @@ QSDemoSet.prototype.render = function (btree) {
     btree.render(this.canvasDivID, divIDjq, this.canvasX, this.canvasY);
 };
 
-var QSDemo = function(dataSet) {
-
-    this.binaryTree = new BinaryTree(dataSet);
-    this.binaryTree.quickSort(this.binaryTree.sortedInts, 0, (this.binaryTree.sortedInts.length - 1));
-    console.log("----------- Quicksort function complete--------------------");
-    console.log("The sorted array is: " + this.binaryTree.sortedInts);
-    
-    // build out the data relationships in the binary tree
-    this.binaryTree.build(); // associates parents with children
-    this.binaryTree.calculateLeafDepths();
-    this.binaryTree.flatten(); // calculates horizontal positions of leaves
-    this.binaryTree.show(); // displays all btree/leaf properties in the console
-//    demo.buildHTML();
-
-    // Start UI display
-    // this.binaryTree.setUIparams(this.canvasX, this.canvasY, this.canvasDivID);
-
-//    this.binaryTree.display();
-//    demo.addDataSet(testData[0]);
-//    demo.setCanvasParams(config.canvasDivID, config.x, config.y);
-//    demo.setFormParams(config.uiDivID, numFields);
-//    demo.renderForm();
-};
-
-QSDemo.prototype.render = function (divID, x, y) {
-    this.divID = divID;
-    this.
-    this.buildHTML();
-    
-};
-
-QSDemo.prototype.buildHTML = function() {
-    console.log("------------------------------------------");
-    console.log("-----------BUILDING THE HTML in QSdemo--------------");
-
-    $(this.canvasDivIDjq).empty();
-
-    this.binaryTree.flatArray.forEach(function(leaf) {
-        console.log("the leaf hIndex is: " + leaf.hIndex);
-        console.log("canvasX is: " + this.canvasX);
-        if (leaf.hIndex === 0) { leaf.xpos = this.canvasX; }
-        else { leaf.xpos = this.binaryTree.getXpos(leaf); }
-        
-        leaf.setHTML(this.canvasY);
-        console.log("-----------------------------------------");
-
-        console.log("the div id is: " + this.divIDjq);
-        $(this.canvasDivIDjq).append(leaf.html);
-
-    }, this);
-};
-
-
-
 QSDemoSet.prototype.renderForm = function (n) {
     var numFields;
     
