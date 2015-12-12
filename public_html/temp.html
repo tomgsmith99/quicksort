@@ -9,12 +9,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <script>
-            function run() {
-                var x = document.getElementById("qsValues").elements.length;
-                console.log("there are " + x + " elements in the form.");
+            var BinaryTree = function(inputArray) {
+                this.inputArray = inputArray;
+//                this.sortedInts = inputArray; // array of ints, the result of the quicksort
+                this.sortedInts = Object.create(inputArray);
+                this.qsCount = 0; // a counter to stop runaway while looops
+// var obj2 = Object.create(obj1);
+                this.leaves = []; // array of leaves, in the order in which they were created
+                this.flatArray = []; // array of leaves, ordered by horizontal position
+                                        // in the tree
+                this.html = "";
+            };
+            
+            window.onload = function () {
+                var initArray = [3,2,1];
                 
-                // var thisArray = document.getElementById("qsArray").elements[];
-            }
+                binaryTree = new BinaryTree(initArray);
+                
+                binaryTree.sortedInts = [1,2,3];
+                
+                console.log("the input array is: " + binaryTree.inputArray);
+                console.log("the sorted array is: " + binaryTree.sortedInts);
+                
+            };
 
         </script>
     </head>

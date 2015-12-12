@@ -16,7 +16,8 @@ QSDemoSet.prototype.render = function (btree) {
 
 QSDemoSet.prototype.renderForm = function (n) {
     var numFields;
-    
+    var initialArray = this.trees[0].inputArray;
+
     if (typeof(n) === "undefined") { numFields = this.numFields; }
     else { numFields = n; }
     
@@ -26,7 +27,8 @@ QSDemoSet.prototype.renderForm = function (n) {
 
     for (i = 0; i <= (numFields - 1); i++) {
         id = "value" + i;
-        thisform += "<input class='inputVals' type='text' size='2' id='" + id + "'>";
+        thisform += "<input class='inputVals' type='text' size='2' ";
+        thisform += "id='" + id + "' value=" + initialArray[i] + ">";
     }
     thisform += "<p>";
     thisform += "<input type = 'text' size = '2' name = 'numFields'>";
@@ -43,6 +45,7 @@ QSDemoSet.prototype.renderForm = function (n) {
 QSDemoSet.prototype.run = function (dataSet) {
     var binaryTree = new BinaryTree(dataSet);
     binaryTree.runQuickSort();
+    this.updateSortResults();
     binaryTree.build();
 
     this.trees.push(binaryTree);

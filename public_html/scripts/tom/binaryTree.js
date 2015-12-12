@@ -1,6 +1,6 @@
 var BinaryTree = function(inputArray) {
     this.inputArray = inputArray;
-    this.sortedInts = inputArray; // array of ints, the result of the quicksort
+    this.sortedInts = Object.create(inputArray); // array of ints, the result of the quicksort
     this.qsCount = 0; // a counter to stop runaway while looops
     
     this.leaves = []; // array of leaves, in the order in which they were created
