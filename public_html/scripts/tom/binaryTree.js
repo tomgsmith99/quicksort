@@ -166,16 +166,18 @@ BinaryTree.prototype.flatten = function() {
         console.log("pivot value: " + leaf.pivotValue + " data: " + leaf.preArray.data);
     });
 
-    // Second, make sure that parent/child pairs appear in proper order
-    for (i = (flatArray.length - 1); i > 0; i-- ) {
-        j = i - 1;
-        while (j >= 0 && (flatArray[i].pivotValue === flatArray[j].pivotValue)) {
-            if (flatArray[i] === flatArray[j].leftChild) {
-                temp = flatArray[i];
-                flatArray[i] = flatArray[j];
-                flatArray[j] = temp;
+    // Second, make sure that for leaves whose pivots are equal, the
+    // smaller leaf appears first
+    for (i=0; i< flatArray.length; i++) {
+        for (j = i; j<flatArray.length; j++) {
+            if (flatArray[i].pivotValue === flatArray[j].pivotValue) {
+                if (flatArray[i].length > flatArray[j].length) {
+                    temp = flatArray[i];
+                    flatArray[i] = flatArray[j];
+                    flatArray[j] = temp;
+                }
             }
-            j--;
+            else { break; }
         }
     }
 
@@ -201,26 +203,7 @@ BinaryTree.prototype.getXpos = function(leaf){
     var xpos;
     
     prevLeaf = this.flatArray[leaf.hIndex - 1];
-    prevLeaf.setWidth(); // this needs to happen here so that the div
-                         // can get added to the DOM and measured.
-
-    // Now that the pivot value is staying in the parent partition, this
-    // logic could probably be significantly reduced. But, I spent so much time
-    // on it I can't bring myself to trash it just yet.
-    if (prevLeaf.isSingleton() && prevLeaf.isLeftChild()) {
-        xpos = prevLeaf.xpos + (prevLeaf.width / 2);
-    }
-    else if (leaf.isSingleton() && leaf.isRightChild()) {
-        var cell = prevLeaf.getLastCell();
-        xpos = 
-                prevLeaf.xpos + 
-                prevLeaf.width - (cell.getWidth() / 2);
-    }
-    else {
-        // change to a ratio where if you have a small child and a large 
-        // parent, the xpos of the child needs to be larger.
-        xpos = prevLeaf.xpos + (prevLeaf.width * .8);
-    }
+    xpos = prevLeaf.getPivotXpos() + prevLeaf.getPivotWidth();
 
     return Math.round(xpos);
 };
@@ -394,6 +377,26 @@ Leaf.prototype.getLastCell = function() {
     return this.postArray.cells[this.length-1];
 };
 
+Leaf.prototype.getPivotDivIDjq = function() {
+    var divID;
+    if (this.isSingleton()) { divID = this.preArray.getPivotDivID(); }
+    else { divID = this.postArray.getPivotDivID(); }
+    
+    return ("#" + divID);
+};
+
+Leaf.prototype.getPivotWidth = function() {
+    var divIDjq = this.getPivotDivIDjq();
+    var width = $(divIDjq).outerWidth();
+    return Math.floor(width);
+};
+
+Leaf.prototype.getPivotXpos = function() {
+    var divIDjq = this.getPivotDivIDjq();
+    var coords = $(divIDjq).offset();
+    return Math.floor(coords.left);
+};
+
 Leaf.prototype.setDivIDs = function() {
     this.preArray.divID = this.divID + "_pre";
     this.preArray.setDivIDs();
@@ -409,10 +412,10 @@ Leaf.prototype.set_H_index = function (i) {
     this.divID = "leaf_" + i;
     this.setDivIDs();
 };
-
-Leaf.prototype.setWidth = function () {
-    this.width = document.getElementById(this.divID).offsetWidth;
-};
+//
+//Leaf.prototype.setWidth = function () {
+//    this.width = document.getElementById(this.divID).offsetWidth;
+//};
 
 Leaf.prototype.hasChildren = function() {
     return (this.hasLeftChild() || this.hasRightChild());
