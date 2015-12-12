@@ -45,7 +45,6 @@ QSDemoSet.prototype.renderForm = function (n) {
 QSDemoSet.prototype.run = function (dataSet) {
     var binaryTree = new BinaryTree(dataSet);
     binaryTree.runQuickSort();
-    this.updateSortResults();
     binaryTree.build();
 
     this.trees.push(binaryTree);
