@@ -30,6 +30,7 @@ BinaryTree.prototype.build = function() {
 };
 
 BinaryTree.prototype.calculateLeafDepths = function() {
+    this.depth = 0; // Total depth of tree
     console.log("------STARTING THE calculateLeafDepths() function ------");
 
     this.leaves.forEach(function(leaf) {
@@ -37,11 +38,16 @@ BinaryTree.prototype.calculateLeafDepths = function() {
         console.log("my binPos is: " + leaf.binPos);
         
         if (leaf.index === 0) { leaf.depth = 0; }
-        else { leaf.depth = leaf.parent.depth + 1; }
+        else {
+            leaf.depth = leaf.parent.depth + 1;
+            if (leaf.depth > this.depth) {
+                this.depth = leaf.depth;
+            }
+        }
         
         console.log("Leaf is: " + leaf.preArray.data + " Depth is: " + leaf.depth);
         console.log("------------");
-    });
+    }, this);
     
     this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
 };
@@ -218,8 +224,8 @@ BinaryTree.prototype.partition = function (A, left, right){
     // this procedure is not necessary for quicksort
     var leaf = new Leaf();
     this.addLeaf(leaf);
-    leaf.setArray("pre", A.slice(left, (right + 1)));
-
+    leaf.setArray("pre", A.slice(left, (right + 1)), left);
+    console.log("SETTING UP A PRE-ARRAY WITH A LEFT VALUE OF: " + left);
     console.log("--------PBEGIN------------");
     console.log("This is the partition we are going to work on:");
 
@@ -300,7 +306,7 @@ BinaryTree.prototype.quickSort = function (A, left, right) {
     else if (left === right) { // Note: this clause is not needed for qs!
         console.log("Nope. This partition is a singleton: " + A[left]);
         var leaf = new Leaf();
-        leaf.setArray("pre", A.slice(left, left+1));
+        leaf.setArray("pre", A.slice(left, left+1), left);
         leaf.setArray("post", A.slice(left, left+1));
         this.addLeaf(leaf);
     }
@@ -325,6 +331,21 @@ BinaryTree.prototype.render = function(divID, divIDjq, x, y) {
     }, this);
 
     this.drawLines(divID);
+
+};
+
+BinaryTree.prototype.renderTable = function() {
+    var i,j;
+
+    for (i = 0; i <= this.depth; i++) {
+        for (j = 0; j < this.leaves.length; j++) {
+            if (this.leaves[j].depth === i) {
+                // this.leaves[j].divID = "table" + this.leaves[j].divID;
+                this.leaves[j].setHTML(120, "table");
+                $("#tableView").append(this.leaves[j].html);
+            }
+        }
+    }
 
 };
 
@@ -397,6 +418,24 @@ Leaf.prototype.getPivotXpos = function() {
     return Math.floor(coords.left);
 };
 
+Leaf.prototype.getXpos = function() {
+    var xpos;
+    var base = 700;
+    var cellWidth = this.getPivotWidth();
+    if (this.isRoot()) { return base; }
+    else { 
+        console.log("the origLeft value is: "+ this.origLeft);
+        return (base + (cellWidth * this.origLeft)); }
+    // var pXpos = this.parent.getPivotXpos();
+//    if (this.isRightChild()) {
+//        // xpos = base + pXpos + this.parent.getPivotWidth();
+//    }
+//    else {
+//        xpos = base + pXpos - (this.length * 20);
+//    }
+//    return xpos;
+};
+
 Leaf.prototype.setDivIDs = function() {
     this.preArray.divID = this.divID + "_pre";
     this.preArray.setDivIDs();
@@ -449,11 +488,15 @@ Leaf.prototype.setAncestors = function() {
     }
 };
 
-Leaf.prototype.setArray = function(type, array) {
+Leaf.prototype.setArray = function(type, array, left) {
+    console.log("i'm in the setArray function. The orig left value is: " + this.origLeft);
+
     if (type === "pre") {
         this.preArray = new Subarray("pre", array);
         this.preArray.setPivotPos();
         this.pivotValue = this.preArray.pivotValue;
+        this.origLeft = left;
+
     }
     else {
         // console.log("trying to set up a new postarray with a pivotvalue of: " + this.pivotValue);
@@ -485,22 +528,28 @@ Leaf.prototype.setChild = function (child) {
     }
 };
 
-Leaf.prototype.setHTML = function(y) {
+Leaf.prototype.setHTML = function(y, mode) {
     var y_init = y;
     var offset = 10; // gives some padding at top of div. Probably a better way
     var y_baseline = y_init + offset;
     
     console.log("my divID is: " + this.divID);
     
-    this.style = "left:" + this.xpos + "px;";
-    
     if (this.depth === 0) { this.ypos = y_baseline; }
     else { this.ypos = y_baseline + (this.depth * 100); }
     
-    this.style += "top:" + this.ypos + "px;";
+    this.style = "top:" + this.ypos + "px;";
     
     this.html =  "<div class = 'node'";
     this.html += " id = '" + this.divID + "'";
+    
+    if (mode === "table") {
+        this.style += "left:" + this.getXpos() + "px;";
+    }
+    else {
+        this.style += "left:" + this.xpos + "px;";
+    }
+
     this.html += " style = '" + this.style + "'";
     this.html += ">";
 
@@ -525,6 +574,8 @@ Leaf.prototype.show = function() {
     console.log("my postArray is: " + this.postArray.data);
     console.log("my length is: " + this.length);
     console.log("my pivot value is: " + this.pivotValue);
+    console.log("my original left value is: " + this.origLeft);
+
 
     if (this.parent !== null) {
         console.log("my parent's preArray is: " + this.parent.preArray.data);

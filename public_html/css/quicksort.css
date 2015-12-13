@@ -10,6 +10,8 @@
     border-width: 1px;
     padding: 2px;
     text-align: center;
+    width: 20px;
+
 }
 
 .pivotPre {
@@ -32,9 +34,11 @@
     font-family: verdana, arial, helvetica, sans-serif;
     background-color: Cornsilk;
     display: inline-block;
-
 }
 
+#topnavContainer {
+    width: 100%
+}
 .inputVals {
     margin: 1px;
     text-align: center;
@@ -50,4 +54,12 @@
     text-align: center;
     vertical-align: top;
 
+}
+
+#tableView, #quickSortCanvas {
+    display: inline-block;
+}
+
+#tableView {
+    float: right;
 }

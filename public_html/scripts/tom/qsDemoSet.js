@@ -14,6 +14,12 @@ QSDemoSet.prototype.render = function (btree) {
     btree.render(this.canvasDivID, this.canvasDivIDjq, this.canvasX, this.canvasY);
 };
 
+QSDemoSet.prototype.renderTable = function(btree) {
+    $("#tableView").empty();
+    
+    btree.renderTable();
+};
+
 QSDemoSet.prototype.renderForm = function (n) {
     var numFields;
     var initialArray = this.trees[0].inputArray;
@@ -45,11 +51,11 @@ QSDemoSet.prototype.renderForm = function (n) {
 QSDemoSet.prototype.run = function (dataSet) {
     var binaryTree = new BinaryTree(dataSet);
     binaryTree.runQuickSort();
-    this.updateSortResults();
     binaryTree.build();
 
     this.trees.push(binaryTree);
     this.render(binaryTree);
+    this.renderTable(binaryTree);
 };
 
 QSDemoSet.prototype.setCanvasID = function (divID) {
