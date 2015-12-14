@@ -5,21 +5,14 @@ var QSDemoSet = function() {
     this.canvasX;
     this.canvasY;
     this.formDivID;
-    
-    this.testVal = "hello world";
+    this.cellWidth = null; // determined at runtime
 };
 
-QSDemoSet.prototype.render = function (btree, mode) {
+QSDemoSet.prototype.render = function (btree) {
     /* global jsPlumb */
     jsPlumb.empty(this.canvasDivID);
     $(this.canvasDivIDjq).empty();
-    btree.render(this.canvasDivID, this.canvasDivIDjq, this.canvasX, this.canvasY, mode);
-};
-
-QSDemoSet.prototype.renderTable = function(btree) {
-    $("#tableView").empty();
-    
-    btree.renderTable();
+    btree.render(this.canvasDivID, this.canvasDivIDjq);
 };
 
 QSDemoSet.prototype.renderForm = function (n) {
@@ -57,7 +50,6 @@ QSDemoSet.prototype.run = function (dataSet) {
 
     this.trees.push(binaryTree);
     this.render(binaryTree, "table");
-    // this.renderTable(binaryTree);
 };
 
 QSDemoSet.prototype.setCanvasID = function (divID) {

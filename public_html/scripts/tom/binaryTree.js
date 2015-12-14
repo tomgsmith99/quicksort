@@ -109,33 +109,43 @@ BinaryTree.prototype.drawLines = function(divID) {
         });
     
 
-        leaves.forEach(function(leaf) {
+        var i = 0;
 
-            if (leaf.hasChildren()) {
-                var source = leaf.postArray.getPivotDivID();
-                var target;
-                
-                var anchorDest = "Top";
-                var anchorSrc = "Bottom";
-                
-                if (leaf.hasLeftChild()) {
-                    target = leaf.leftChild.preArray.divID;
-                    anchorSrc = "BottomLeft";
-                    if (leaf.leftChild.hasChildren()) {
-                        anchorDest = "TopRight";
-                    }
-                    drawLine(source, target, anchorSrc, anchorDest);
-                }
-                anchorDest = "Top";
-                if (leaf.hasRightChild()) {
-                    target = leaf.rightChild.preArray.divID;
-                    anchorSrc = "BottomRight";
-                    if (leaf.rightChild.hasChildren()) {
-                        anchorDest = "TopLeft";
-                    }
-                    drawLine(source, target, anchorSrc, anchorDest);
-                }
-            }
+        leaves.forEach(function(leaf) {
+            var source = leaf.getPivotDivID();
+            var target = "cell_final_" + i;
+            i++;
+
+            var anchorDest = "Top";
+            var anchorSrc = "Bottom";
+            drawLine(source, target, anchorSrc, anchorDest);
+
+
+
+//            if (leaf.hasChildren()) {
+//                var source = leaf.postArray.getPivotDivID();
+//                var target;
+//                
+//                var anchorDest = "Top";
+//                var anchorSrc = "Bottom";
+//                
+//                if (leaf.hasLeftChild()) {
+//                    target = leaf.leftChild.preArray.divID;
+//                    anchorSrc = "BottomLeft";
+//                    if (leaf.leftChild.hasChildren()) {
+//                        anchorDest = "TopRight";
+//                    }
+//                    drawLine(source, target, anchorSrc, anchorDest);
+//                }
+//                anchorDest = "Top";
+//                if (leaf.hasRightChild()) {
+//                    target = leaf.rightChild.preArray.divID;
+//                    anchorSrc = "BottomRight";
+//                    if (leaf.rightChild.hasChildren()) {
+//                        anchorDest = "TopLeft";
+//                    }
+//                    drawLine(source, target, anchorSrc, anchorDest);
+//                }
         });
     }, this);
 
@@ -203,6 +213,7 @@ BinaryTree.prototype.flatten = function() {
     this.flatArray = flatArray;
 };
 
+// kill
 BinaryTree.prototype.getXpos = function(leaf){
     console.log("getting the xpos for: " + leaf.preArray.data);
     var prevLeaf;
@@ -313,41 +324,27 @@ BinaryTree.prototype.quickSort = function (A, left, right) {
     else { console.log("right > left, so we are done!"); } // also unnecessary
 };
 
-BinaryTree.prototype.render = function(divID, divIDjq, xOffset, yOffset, mode) {
+BinaryTree.prototype.render = function(divID, divIDjq) {
     console.log("------------------------------------------");
     console.log("-----------STARTING THE RENDER FUNCTION--------------");
-    console.log("-----------RENDER = " + mode );
 
-    if (mode === "table") {
-        var width = null;
-        this.leaves.forEach(function (leaf) {
-            $(divIDjq).append(leaf.getHTML(xOffset, yOffset, width, mode));
-            if (leaf.isRoot()) { width = leaf.getPivotWidth(); }
-        });
-        
-        var leaf = new Leaf();
-        // this.addLeaf(leaf);
-        leaf.setArray("pre", this.sortedInts, 0);
-        leaf.depth = this.depth + 1;
-        leaf.isFinal = true;
-        $(divIDjq).append(leaf.getHTML(xOffset, yOffset, width, mode));
-    }
-    else {
-        this.flatArray.forEach(function(leaf) {
-            console.log("the leaf hIndex is: " + leaf.hIndex);
+    var i = 0;
 
-            if (leaf.hIndex === 0) { leaf.xpos = x; }
-            else { leaf.xpos = this.getXpos(leaf); } // careful! this = binaryTree
+    this.leaves.forEach(function (leaf) {
+        $(divIDjq).append(leaf.getHTML());
+        if (qsDemoSet.cellWidth === null) { qsDemoSet.cellWidth = leaf.getPivotWidth(); }
+    });
 
-            leaf.setHTML(y);
-            console.log("-----------------------------------------");
-
-            $(divIDjq).append(leaf.html);
-
-        }, this);
-        this.drawLines(divID);
-    }
-
+    var leaf = new Leaf();
+    leaf.setArray("pre", this.sortedInts, 0);
+    leaf.depth = this.depth + 1;
+    leaf.isFinal = true;
+    leaf.preArray.cells.forEach(function(cell) {
+        cell.divID = "cell_final_" + i;
+        i++;
+    });
+    $(divIDjq).append(leaf.getHTML());
+    this.drawLines(divID);
 };
 
 BinaryTree.prototype.runQuickSort = function() {
@@ -400,12 +397,13 @@ Leaf.prototype.getLastCell = function() {
     return this.postArray.cells[this.length-1];
 };
 
+Leaf.prototype.getPivotDivID = function() {
+    if (this.isSingleton()) { return this.preArray.getPivotDivID(); }
+    else { return this.postArray.getPivotDivID(); }
+};
+
 Leaf.prototype.getPivotDivIDjq = function() {
-    var divID;
-    if (this.isSingleton()) { divID = this.preArray.getPivotDivID(); }
-    else { divID = this.postArray.getPivotDivID(); }
-    
-    return ("#" + divID);
+    return ("#" + this.getPivotDivID());
 };
 
 Leaf.prototype.getPivotWidth = function() {
@@ -420,8 +418,9 @@ Leaf.prototype.getPivotXpos = function() {
     return Math.floor(coords.left);
 };
 
-Leaf.prototype.getXpos = function(xOffset, width) {
-    return (xOffset + (width * this.origLeft));
+Leaf.prototype.getXpos = function() {
+    /* global qsDemoSet */
+    return (qsDemoSet.canvasX + (qsDemoSet.cellWidth * this.origLeft));
 };
 
 Leaf.prototype.setDivIDs = function() {
@@ -509,10 +508,9 @@ Leaf.prototype.setChild = function (child) {
     }
 };
 
-Leaf.prototype.getHTML = function(xOffset, yOffset, width, mode) {
+Leaf.prototype.getHTML = function() {
     var divClass;
     console.log("my divID is: " + this.divID);
-    console.log("width is: " + width);
 
     if (this.isFinal) { divClass = "leaf_final"; }
     else { divClass = "leaf"; }
@@ -520,7 +518,7 @@ Leaf.prototype.getHTML = function(xOffset, yOffset, width, mode) {
     this.html =  "<div class='" + divClass + "'";
     this.html += " id = '" + this.divID + "'";
 
-    this.html += " style = '" + this.getStyle(xOffset, yOffset, width, mode) + "'";
+    this.html += " style = '" + this.getStyle() + "'";
 
     this.html += ">";
 
@@ -537,61 +535,18 @@ Leaf.prototype.getHTML = function(xOffset, yOffset, width, mode) {
 
 };
 
-Leaf.prototype.getStyle = function(xOffset, yOffset, width, mode) {
-    
+Leaf.prototype.getStyle = function() {
     var style;
     var top;
 
     // Set top value
-    if (this.depth === 0) { top = yOffset; }
-    else { top = yOffset + (this.depth * 100); }
+    if (this.depth === 0) { top = qsDemoSet.canvasY; }
+    else { top = qsDemoSet.canvasY + (this.depth * qsDemoSet.rowSpace); }
     style = "top:" + top + "px;";
 
     // Set left value
-    if (mode === "table") {
-        style += "left:" + this.getXpos(xOffset, width) + "px;";
-    }
-    else {
-        style += "left:" + this.xpos + "px;";
-    }
-    
+    style += "left:" + this.getXpos() + "px;";
     return style;
-};
-
-Leaf.prototype.setHTML = function(y, mode) {
-    var y_init = y;
-    var offset = 10; // gives some padding at top of div. Probably a better way
-    var y_baseline = y_init + offset;
-    
-    console.log("my divID is: " + this.divID);
-    
-    if (this.depth === 0) { this.ypos = y_baseline; }
-    else { this.ypos = y_baseline + (this.depth * 100); }
-    
-    this.style = "top:" + this.ypos + "px;";
-    
-    this.html =  "<div class = 'node'";
-    this.html += " id = '" + this.divID + "'";
-    
-    if (mode === "table") {
-        this.style += "left:" + this.getXpos() + "px;";
-    }
-    else {
-        this.style += "left:" + this.xpos + "px;";
-    }
-
-    this.html += " style = '" + this.style + "'";
-    this.html += ">";
-
-    this.html += this.preArray.getHTML();
-
-    if (this.isSingleton() === false) {
-        this.html += this.postArray.getHTML();
-    }
-
-    this.html += "</div>";
-    
-    console.log("my HTML is: " + this.html);
 };
 
 Leaf.prototype.setIndex = function(index) { this.index = index; };
@@ -654,6 +609,7 @@ Cell.prototype.getHTML = function(isSingleton, partitionType) {
     return this.html;
 };
 
+// Probably no longer necessary
 Cell.prototype.getWidth = function() {
     return document.getElementById(this.divID).offsetWidth;
 };
