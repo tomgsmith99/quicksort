@@ -479,7 +479,6 @@ Leaf.prototype.setArray = function(type, array, left) {
         this.origLeft = left;
     }
     else {
-        // console.log("trying to set up a new postarray with a pivotvalue of: " + this.pivotValue);
         this.postArray = new Subarray("post", array);
         this.postArray.setPivotPos(this.pivotValue);
     }

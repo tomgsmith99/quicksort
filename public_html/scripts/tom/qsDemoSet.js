@@ -82,12 +82,25 @@ function randomize () {
 function run () {
     /* global qsDemoSet */
     var dataSet = [];
-
     var inputArray = $(".inputVals").toArray();
 
+    // error-checking input
     inputArray.forEach(function (item) {
-        if (item.value !== "") { 
-            dataSet.push(parseInt(item.value));
+        if (item.value !== "") {
+            var finalVal = parseInt(item.value);
+            console.log("item value is " + item.value + " and finalVal is: "+ finalVal);
+            if (isNaN(finalVal)) {}
+            else {
+                if (finalVal > qsDemoSet.maxVal) {
+                    console.log("maxVal for input exceeded, changing " + finalVal + " to " + qsDemoSet.maxVal);
+                    finalVal = qsDemoSet.maxVal;
+                }
+                else if (finalVal < qsDemoSet.minVal) {
+                    console.log("minVal for input exceeded, changing" + finalVal + " to " + qsDemoSet.minVal);
+                    finalVal = qsDemoSet.minVal;
+                }
+                dataSet.push(finalVal);
+            }
         }
     });
 
