@@ -85,7 +85,11 @@ function run () {
 
     var inputArray = $(".inputVals").toArray();
 
-    inputArray.forEach(function (item) {dataSet.push(parseInt(item.value)); });
+    inputArray.forEach(function (item) {
+        if (item.value !== "") { 
+            dataSet.push(parseInt(item.value));
+        }
+    });
 
     console.log("the data set is: " + dataSet);
 
