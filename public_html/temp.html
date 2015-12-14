@@ -21,15 +21,31 @@
                 this.html = "";
             };
             
+            var Vehicle = function(make) {
+                this.make = make;
+            };
+            
+            Vehicle.prototype.getMake = function() {
+                return this.make;
+            };
+            
+            Vehicle.prototype.addType = function(type) {
+                this.type = new TypeOfVehicle(type);
+            };
+            
+            var TypeOfVehicle = function(type) {
+                this.type = type;
+            };
+            
+            TypeOfVehicle.prototype.getType = function() {
+                return this.type;
+            };
+            
             window.onload = function () {
-                var initArray = [3,2,1];
                 
-                binaryTree = new BinaryTree(initArray);
-                
-                binaryTree.sortedInts = [1,2,3];
-                
-                console.log("the input array is: " + binaryTree.inputArray);
-                console.log("the sorted array is: " + binaryTree.sortedInts);
+                var vehicle = new Vehicle("Honda");
+
+                console.log("the make is: " + vehicle.getMake());
                 
             };
 

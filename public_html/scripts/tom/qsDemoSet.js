@@ -5,13 +5,15 @@ var QSDemoSet = function() {
     this.canvasX;
     this.canvasY;
     this.formDivID;
+    
+    this.testVal = "hello world";
 };
 
-QSDemoSet.prototype.render = function (btree) {
+QSDemoSet.prototype.render = function (btree, mode) {
     /* global jsPlumb */
     jsPlumb.empty(this.canvasDivID);
     $(this.canvasDivIDjq).empty();
-    btree.render(this.canvasDivID, this.canvasDivIDjq, this.canvasX, this.canvasY);
+    btree.render(this.canvasDivID, this.canvasDivIDjq, this.canvasX, this.canvasY, mode);
 };
 
 QSDemoSet.prototype.renderTable = function(btree) {
@@ -54,8 +56,8 @@ QSDemoSet.prototype.run = function (dataSet) {
     binaryTree.build();
 
     this.trees.push(binaryTree);
-    this.render(binaryTree);
-    this.renderTable(binaryTree);
+    this.render(binaryTree, "table");
+    // this.renderTable(binaryTree);
 };
 
 QSDemoSet.prototype.setCanvasID = function (divID) {

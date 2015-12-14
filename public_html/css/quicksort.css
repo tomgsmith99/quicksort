@@ -1,8 +1,12 @@
-.node {
+.leaf, .leaf_final {
     width: max-content;
     position: absolute;
     font-family: verdana, arial, helvetica, sans-serif;
 }
+
+.leaf_final .cell { background-color: DarkSeaGreen;}
+.leaf_final .pivotPre { background-color: DarkSeaGreen;}
+.leaf_final .array { margin-top: 0px; }
 
 .cell, .pivotPost, .pivotPre, .singleton {
     display: inline-block;
