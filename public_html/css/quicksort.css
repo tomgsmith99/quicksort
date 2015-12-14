@@ -67,3 +67,10 @@
 #tableView {
     float: right;
 }
+
+p.form {
+    margin: 3px;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 75%
+
+}

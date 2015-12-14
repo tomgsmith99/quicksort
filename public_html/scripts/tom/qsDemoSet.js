@@ -1,11 +1,11 @@
 var QSDemoSet = function() {
-
     this.trees = [];
     this.canvasDivID;
     this.canvasX;
     this.canvasY;
     this.formDivID;
     this.cellWidth = null; // determined at runtime
+    this.isFirstRun = true;
 };
 
 QSDemoSet.prototype.render = function (btree) {
@@ -21,20 +21,24 @@ QSDemoSet.prototype.renderForm = function (n) {
 
     if (typeof(n) === "undefined") { numFields = this.numFields; }
     else { numFields = n; }
-    
-    var thisform = "<form id='qsArray' name='qsArray'>";
+
+    var thisform = "<form id='qsArray'>";
     var id = "";
     var i;
 
     for (i = 0; i <= (numFields - 1); i++) {
         id = "value" + i;
+
         thisform += "<input class='inputVals' type='text' size='2' ";
         thisform += "id='" + id + "' value=" + initialArray[i] + ">";
     }
-    thisform += "<p>";
-    thisform += "<input type = 'text' size = '2' name = 'numFields'>";
     thisform += "</form>";
 
+    thisform += "<p class ='form'>";
+    thisform += "Number of fields: <input type = 'text' size = '2' id = 'numFields'>";
+    thisform += "<button type = 'button' id 'numButton' onclick='updateNumFields()'>update</button>";
+    thisform += "</p>";
+    
     thisform += "<button type = 'button' id = 'runButton' onclick='run()'>run</button>";
 
     thisform += "<button type = 'button' id = 'randButton' onclick='randomize()'>randomize</button>";
@@ -87,3 +91,20 @@ function run () {
 
     qsDemoSet.run(dataSet);
 };
+
+function updateNumFields() {
+    var numFields = document.getElementById("numFields").value;
+
+    var thisform="";
+    var id = "";
+    var i;
+
+    for (i = 0; i <= (numFields - 1); i++) {
+        id = "value" + i;
+
+        thisform += "<input class='inputVals' type='text' size='2' ";
+        thisform += "id='" + id + "'>";
+    }
+
+    $("#qsArray").html(thisform);
+}
