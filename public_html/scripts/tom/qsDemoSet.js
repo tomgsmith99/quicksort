@@ -29,12 +29,13 @@ QSDemoSet.prototype.renderForm = function (n) {
 };
 
 QSDemoSet.prototype.run = function (dataSet) {
+    updateFields(dataSet);
     var binaryTree = new BinaryTree(dataSet);
     binaryTree.runQuickSort();
     binaryTree.build();
 
     this.trees.push(binaryTree);
-    this.render(binaryTree, "table");
+    this.render(binaryTree);
 };
 
 QSDemoSet.prototype.setCanvasID = function (divID) {
@@ -65,7 +66,7 @@ function run () {
     var dataSet = [];
     var inputArray = $(".inputVals").toArray();
 
-    // error-checking input
+    // error-checking user input
     inputArray.forEach(function (item) {
         if (item.value !== "") {
             var finalVal = parseInt(item.value);
@@ -94,7 +95,7 @@ function updateFields(dataSet) {
     var i;
     var fields = "";
     var id;
-    
+
     if (dataSet !== undefined) {
         for (i = 0; i <= (dataSet.length - 1); i++) {
             id = "value" + i;
@@ -103,8 +104,23 @@ function updateFields(dataSet) {
         }
     }
     else {
+        var userInput;
         if (document.getElementById("numFields").value !== "") {
-            numFields = document.getElementById("numFields").value;
+            userInput = parseInt(document.getElementById("numFields").value);
+            if (isNaN(userInput)) { console.log("sorry, not a number."); }
+            else {
+                if (userInput < 1) {
+                    console.log("Number of fields needs to be at least 1.");
+                    numFields = 1;
+                }
+                else if (userInput > qsDemoSet.maxFields) {
+                    console.log("I have throttled the max number of fields to " + qsDemoSet.maxFields);
+                    console.log("so that newbies don't crash their browsers");
+                    console.log("feel free to overwrite.");
+                    numFields = qsDemoSet.maxFields;
+                }
+                else { numFields = userInput; }
+            }
         }
         else { numFields = qsDemoSet.numFields; }
 
@@ -115,4 +131,5 @@ function updateFields(dataSet) {
         }
     }
     $("#qsArray").html(fields);
+    $("#numFields").val(numFields);
 }
