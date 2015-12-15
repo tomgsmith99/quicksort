@@ -5,7 +5,6 @@ var QSDemoSet = function() {
     this.canvasY;
     this.formDivID;
     this.cellWidth = null; // determined at runtime
-    this.isFirstRun = true;
 };
 
 QSDemoSet.prototype.render = function (btree) {
@@ -16,35 +15,17 @@ QSDemoSet.prototype.render = function (btree) {
 };
 
 QSDemoSet.prototype.renderForm = function (n) {
-    var numFields;
-    var initialArray = this.trees[0].inputArray;
-
-    if (typeof(n) === "undefined") { numFields = this.numFields; }
-    else { numFields = n; }
-
-    var thisform = "<form id='qsArray'>";
-    var id = "";
-    var i;
-
-    for (i = 0; i <= (numFields - 1); i++) {
-        id = "value" + i;
-
-        thisform += "<input class='inputVals' type='text' size='2' ";
-        thisform += "id='" + id + "' value=" + initialArray[i] + ">";
-    }
-    thisform += "</form>";
+    var thisform = "<form id='qsArray'></form>";
 
     thisform += "<p class ='form'>";
-    thisform += "Number of fields: <input type = 'text' size = '2' id = 'numFields'>";
-    thisform += "<button type = 'button' id 'numButton' onclick='updateNumFields()'>update</button>";
-    thisform += "</p>";
-    
     thisform += "<button type = 'button' id = 'runButton' onclick='run()'>run</button>";
-
     thisform += "<button type = 'button' id = 'randButton' onclick='randomize()'>randomize</button>";
+    thisform += "Number of fields: <input type = 'text' size = '2' id = 'numFields'>";
+    thisform += "<button type = 'button' id = 'numButton' onclick='updateFields()'>update</button>";
+    thisform += "</p>";
 
     $(this.formDivIDjq).append(thisform);
-
+    updateFields(this.trees[0].inputArray);
 };
 
 QSDemoSet.prototype.run = function (dataSet) {
@@ -69,7 +50,7 @@ QSDemoSet.prototype.setFormID = function (divID) {
 function randomize () {
     var i;
     var id;
-    
+
     var inputArray = $(".inputVals").toArray();
     var length = inputArray.length;
 
@@ -105,23 +86,33 @@ function run () {
     });
 
     console.log("the data set is: " + dataSet);
-
     qsDemoSet.run(dataSet);
 };
 
-function updateNumFields() {
-    var numFields = document.getElementById("numFields").value;
-
-    var thisform="";
-    var id = "";
+function updateFields(dataSet) {
+    var numFields;
     var i;
-
-    for (i = 0; i <= (numFields - 1); i++) {
-        id = "value" + i;
-
-        thisform += "<input class='inputVals' type='text' size='2' ";
-        thisform += "id='" + id + "'>";
+    var fields = "";
+    var id;
+    
+    if (dataSet !== undefined) {
+        for (i = 0; i <= (dataSet.length - 1); i++) {
+            id = "value" + i;
+            fields += "<input class='inputVals' type='text' size='2' ";
+            fields += "id='" + id + "' value=" + dataSet[i] + ">";
+        }
     }
+    else {
+        if (document.getElementById("numFields").value !== "") {
+            numFields = document.getElementById("numFields").value;
+        }
+        else { numFields = qsDemoSet.numFields; }
 
-    $("#qsArray").html(thisform);
+        for (i = 0; i <= (numFields - 1); i++) {
+            id = "value" + i;
+            fields += "<input class='inputVals' type='text' size='2' ";
+            fields += "id='" + id + "'>";
+        }
+    }
+    $("#qsArray").html(fields);
 }
