@@ -29,61 +29,15 @@
                 qsDemoSet.maxFields = 40;
 
             window.onload = function () {
-                // var initialArray = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
                 
                 var initialArray = [22,45,35,77,73,52,0,55,77,16];
                 
-                initialArray = [59, 17, 3, 9, 71, 39, 81, 85, 91, 83];
-                
                 qsDemoSet.run(initialArray);
                 qsDemoSet.renderForm();
-
             };
-
         </script>
-<!--            /*
-
-            def quickSort(A, left, right): # Accept the array and arbitrary values for left
-    # and right. In practice, left should always be less than right, except in
-    # the case where the array has a length of 1, and in that case,
-    # left is equal to right.
-
-    if left < right: # this will always execute, unless 1) left > right, which
-        # should not happen if we've constructed the Partition function properly
-        # (and also passed in good values to start) or 2) left = right, in which case 
-        
-        pivot = partition(A, left, right) # get a pivot value between the left index and the right index
-        printArray(A)
-        printArray(A[left:pivot])
-        quickSort (A, left, pivot)
-        printArray(A[left:pivot])
-        quickSort (A, (pivot+1), right)
-        x = pivot + 1
-        printArray(A[x:right])
-
-def partition(A, left, right):
-    pivot = A[left]
-
-    while True:
-        while A[right] > pivot:
-            right = right - 1
-        while A[left]  < pivot:
-            left = left + 1
-        if left < right:
-            temp = A[left]
-            A[left] = A[right]
-            A[right] = temp
-        else:
-            # printArray(A)
-            return right
-
-quickSort(A, 0, (len(A) - 1))
-# partition(A, 0, (len(A) - 1))
-
-        </script>-->
-
-
     </head>
+
     <body>
         <div class = "topnav" id="topnavContainer">
             <div class="topnav" id="topnavLeft">
@@ -93,7 +47,6 @@ quickSort(A, 0, (len(A) - 1))
         </div>
         <div id ='canvas'>
             <div id="quickSortCanvas"></div>
-            <div id='tableView'></div>
         </div>
 
     </body>
