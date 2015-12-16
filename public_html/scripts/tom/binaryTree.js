@@ -332,7 +332,7 @@ BinaryTree.prototype.render = function(divID, divIDjq) {
 
     this.leaves.forEach(function (leaf) {
         $(divIDjq).append(leaf.getHTML());
-        if (qsDemoSet.cellWidth === null) { qsDemoSet.cellWidth = leaf.getPivotWidth(); }
+        if (qsDemo.cellWidth === null) { qsDemo.cellWidth = leaf.getPivotWidth(); }
     });
 
     var leaf = new Leaf();
@@ -419,8 +419,8 @@ Leaf.prototype.getPivotXpos = function() {
 };
 
 Leaf.prototype.getXpos = function() {
-    /* global qsDemoSet */
-    return (qsDemoSet.canvasX + (qsDemoSet.cellWidth * this.origLeft));
+    /* global qsDemo */
+    return (qsDemo.canvasX + (qsDemo.cellWidth * this.origLeft));
 };
 
 Leaf.prototype.setDivIDs = function() {
@@ -539,8 +539,8 @@ Leaf.prototype.getStyle = function() {
     var top;
 
     // Set top value
-    if (this.depth === 0) { top = qsDemoSet.canvasY; }
-    else { top = qsDemoSet.canvasY + (this.depth * qsDemoSet.rowSpace); }
+    if (this.depth === 0) { top = qsDemo.canvasY; }
+    else { top = qsDemo.canvasY + (this.depth * qsDemo.rowSpace); }
     style = "top:" + top + "px;";
 
     // Set left value

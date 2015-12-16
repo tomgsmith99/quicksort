@@ -1,4 +1,4 @@
-var QSDemoSet = function() {
+var QSDemo = function() {
     this.trees = [];
     this.canvasDivID;
     this.canvasX;
@@ -7,14 +7,14 @@ var QSDemoSet = function() {
     this.cellWidth = null; // determined at runtime
 };
 
-QSDemoSet.prototype.render = function (btree) {
+QSDemo.prototype.render = function (btree) {
     /* global jsPlumb */
     jsPlumb.empty(this.canvasDivID);
     $(this.canvasDivIDjq).empty();
     btree.render(this.canvasDivID, this.canvasDivIDjq);
 };
 
-QSDemoSet.prototype.renderForm = function (n) {
+QSDemo.prototype.renderForm = function (n) {
     var thisform = "<form id='qsArray'></form>";
 
     thisform += "<p class ='form'>";
@@ -28,7 +28,7 @@ QSDemoSet.prototype.renderForm = function (n) {
     updateFields(this.trees[0].inputArray);
 };
 
-QSDemoSet.prototype.run = function (dataSet) {
+QSDemo.prototype.run = function (dataSet) {
     updateFields(dataSet);
     var binaryTree = new BinaryTree(dataSet);
     binaryTree.runQuickSort();
@@ -38,12 +38,12 @@ QSDemoSet.prototype.run = function (dataSet) {
     this.render(binaryTree);
 };
 
-QSDemoSet.prototype.setCanvasID = function (divID) {
+QSDemo.prototype.setCanvasID = function (divID) {
     this.canvasDivID = divID;
     this.canvasDivIDjq = "#" + this.canvasDivID;
 };
 
-QSDemoSet.prototype.setFormID = function (divID) {
+QSDemo.prototype.setFormID = function (divID) {
     this.formDivID = divID;
     this.formDivIDjq = "#" + divID;
 };
@@ -62,7 +62,7 @@ function randomize () {
 };
 
 function run () {
-    /* global qsDemoSet */
+    /* global qsDemo */
     var dataSet = [];
     var inputArray = $(".inputVals").toArray();
 
@@ -73,13 +73,13 @@ function run () {
             console.log("item value is " + item.value + " and finalVal is: "+ finalVal);
             if (isNaN(finalVal)) {}
             else {
-                if (finalVal > qsDemoSet.maxVal) {
-                    console.log("maxVal for input exceeded, changing " + finalVal + " to " + qsDemoSet.maxVal);
-                    finalVal = qsDemoSet.maxVal;
+                if (finalVal > qsDemo.maxVal) {
+                    console.log("maxVal for input exceeded, changing " + finalVal + " to " + qsDemo.maxVal);
+                    finalVal = qsDemo.maxVal;
                 }
-                else if (finalVal < qsDemoSet.minVal) {
-                    console.log("minVal for input exceeded, changing" + finalVal + " to " + qsDemoSet.minVal);
-                    finalVal = qsDemoSet.minVal;
+                else if (finalVal < qsDemo.minVal) {
+                    console.log("minVal for input exceeded, changing" + finalVal + " to " + qsDemo.minVal);
+                    finalVal = qsDemo.minVal;
                 }
                 dataSet.push(finalVal);
             }
@@ -87,7 +87,7 @@ function run () {
     });
 
     console.log("the data set is: " + dataSet);
-    qsDemoSet.run(dataSet);
+    qsDemo.run(dataSet);
 };
 
 function updateFields(dataSet) {
@@ -113,16 +113,16 @@ function updateFields(dataSet) {
                     console.log("Number of fields needs to be at least 1.");
                     numFields = 1;
                 }
-                else if (userInput > qsDemoSet.maxFields) {
-                    console.log("I have throttled the max number of fields to " + qsDemoSet.maxFields);
+                else if (userInput > qsDemo.maxFields) {
+                    console.log("I have throttled the max number of fields to " + qsDemo.maxFields);
                     console.log("so that newbies don't crash their browsers");
                     console.log("feel free to overwrite.");
-                    numFields = qsDemoSet.maxFields;
+                    numFields = qsDemo.maxFields;
                 }
                 else { numFields = userInput; }
             }
         }
-        else { numFields = qsDemoSet.numFields; }
+        else { numFields = qsDemo.numFields; }
 
         for (i = 0; i <= (numFields - 1); i++) {
             id = "value" + i;

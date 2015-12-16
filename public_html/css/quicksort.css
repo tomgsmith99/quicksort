@@ -46,26 +46,23 @@
 .inputVals {
     margin: 1px;
     text-align: center;
-
-}
-
-#submitValues, #randomize {
-    margin: 2px;
 }
 
 #topnavLeft {
-    width: 25%;
+    width: 150px;
     text-align: center;
     vertical-align: top;
+    float: left;
+}
+
+#topnavRight {
+    margin-left: 150px;
+    text-align: left;
 
 }
 
-#tableView, #quickSortCanvas {
+#quickSortCanvas {
     display: inline-block;
-}
-
-#tableView {
-    float: right;
 }
 
 p.form {
@@ -78,5 +75,4 @@ p.form {
 #runButton, #randButton, #numButton {
     margin-left: 5px;
     margin-right: 5px;
-
 }
