@@ -2,16 +2,13 @@ var BinaryTree = function(inputArray) {
     this.inputArray = inputArray;
     this.sortedInts = Object.create(inputArray); // array of ints, the result of the quicksort
     this.qsCount = 0; // a counter to stop runaway while looops
-    
     this.leaves = []; // array of leaves, in the order in which they were created
-    this.flatArray = []; // array of leaves, ordered by horizontal position
-                            // in the tree
     this.html = "";
 };
 
 BinaryTree.prototype.addLeaf = function(leaf) {
-    this.total = this.leaves.push(leaf);
-    leaf.setIndex(this.total - 1);
+    this.total = this.leaves.push(leaf); // probably don't need .total anymore
+    leaf.setIndex(this.total - 1); // need index to determine root
 };
 
 BinaryTree.prototype.associate = function(parent, child) {
@@ -49,10 +46,14 @@ BinaryTree.prototype.calculateLeafDepths = function() {
         console.log("------------");
     }, this);
     
-    this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
+    // this.leaves.forEach(function(leaf) { leaf.setAncestors(); });
 };
 
+
 BinaryTree.prototype.connectLeaves = function() {
+/* this might be better achieved by tracking parent/child relationhsips in 
+ * the partition and quicksort functions.
+ */
     var i, j, z;
     var leaf, pleaf;
     
@@ -68,10 +69,8 @@ BinaryTree.prototype.connectLeaves = function() {
 
         console.log("the child value is: " + leaf.preArray.data);
 
-        z = 0;
-
-        while (leaf.hasParent() === false && z < 10000) {
-            z++;
+        while (leaf.hasParent() === false) {
+            // if (z++ > 10000) { throw new Error("too many loops in connectLeaves"); }
             var child = leaf.postArray.data;
             pleaf = this.leaves[j];
             var potParent = pleaf.postArray.data;
@@ -92,14 +91,16 @@ BinaryTree.prototype.connectLeaves = function() {
 
 BinaryTree.prototype.drawLines = function(divID) {
     /* global jsPlumb */
+    var i = 0;
     var leaves = this.leaves; // not 100% sure why I have to do this.
-                                // but foreach loop won't work otherwise.
+                              // but foreach loop won't work otherwise.
 
     jsPlumb.ready(function() {
 
         jsPlumb.setContainer(divID);
 
         jsPlumb.importDefaults({
+            Anchors: ["Bottom", "Top"],
             Connector : "Straight",
             PaintStyle:{ strokeStyle:"black", lineWidth:1 },
             EndpointStyle:{ radius: 1 },
@@ -107,59 +108,22 @@ BinaryTree.prototype.drawLines = function(divID) {
                 ["Arrow", { location: 1, width: 5, length: 5 }]
             ]
         });
-    
-
-        var i = 0;
 
         leaves.forEach(function(leaf) {
-            var source = leaf.getPivotDivID();
             var target = "cell_final_" + i;
             i++;
 
-            var anchorDest = "Top";
-            var anchorSrc = "Bottom";
-            drawLine(source, target, anchorSrc, anchorDest);
-
-
-
-//            if (leaf.hasChildren()) {
-//                var source = leaf.postArray.getPivotDivID();
-//                var target;
-//                
-//                var anchorDest = "Top";
-//                var anchorSrc = "Bottom";
-//                
-//                if (leaf.hasLeftChild()) {
-//                    target = leaf.leftChild.preArray.divID;
-//                    anchorSrc = "BottomLeft";
-//                    if (leaf.leftChild.hasChildren()) {
-//                        anchorDest = "TopRight";
-//                    }
-//                    drawLine(source, target, anchorSrc, anchorDest);
-//                }
-//                anchorDest = "Top";
-//                if (leaf.hasRightChild()) {
-//                    target = leaf.rightChild.preArray.divID;
-//                    anchorSrc = "BottomRight";
-//                    if (leaf.rightChild.hasChildren()) {
-//                        anchorDest = "TopLeft";
-//                    }
-//                    drawLine(source, target, anchorSrc, anchorDest);
-//                }
+            jsPlumb.connect({
+                source:leaf.getPivotDivID(),
+                target:target
+            });
         });
-    }, this);
-
-    function drawLine(source, target, anchorSrc, anchorDest) {
-        jsPlumb.connect({
-            anchors:[anchorSrc, anchorDest],
-
-            source:source,
-            target:target
-        });
-    }
+    });
 };
 
 BinaryTree.prototype.flatten = function() {
+    // There may be a better way to do this. But, the logic gets hairy
+    // when there are equal values in the initial array.
     console.log("--------------STARTING THE flatten() function-------------");
     var i, j;
     var flatArray = this.leaves;
@@ -202,27 +166,6 @@ BinaryTree.prototype.flatten = function() {
     flatArray.forEach(function(leaf){
         console.log("pivot value: " + leaf.pivotValue + " data: " + leaf.preArray.data);
     });
-    
-    // Third, assign an hIndex value to each of the leaves
-    i = 0;
-    flatArray.forEach(function(leaf){
-        leaf.set_H_index(i);
-        i++;
-    });
-    
-    this.flatArray = flatArray;
-};
-
-// kill
-BinaryTree.prototype.getXpos = function(leaf){
-    console.log("getting the xpos for: " + leaf.preArray.data);
-    var prevLeaf;
-    var xpos;
-    
-    prevLeaf = this.flatArray[leaf.hIndex - 1];
-    xpos = prevLeaf.getPivotXpos() + prevLeaf.getPivotWidth();
-
-    return Math.round(xpos);
 };
 
 BinaryTree.prototype.partition = function (A, left, right){
@@ -286,19 +229,13 @@ BinaryTree.prototype.partition = function (A, left, right){
     // this procedure is not necessary for quicksort
     leaf.setArray("post", A.slice(left, (right + 1)));
 
-    // console.log("The full array is now: " + A.join(' '));
-
-
-    retVal = i - 1;
-    return retVal;
+    return i - 1;
 };
 
 BinaryTree.prototype.quickSort = function (A, left, right) {
     var pivot;
 
-    this.qsCount++;
-
-    if (this.qsCount > 100) { throw new Error("too many qs loops"); }
+    // if (this.qsCount++ > 100) { throw new Error("too many qs loops"); }
     console.log("----------QSBEGIN----------");
     console.log("Starting a qs function.");
     console.log("Iteration number: " + this.qsCount);
@@ -314,25 +251,29 @@ BinaryTree.prototype.quickSort = function (A, left, right) {
         this.quickSort (A, left, (pivot-1));
         this.quickSort (A, (pivot+1), right);
     }
-    else if (left === right) { // Note: this clause is not needed for qs!
+    else if (left === right) {  // Not needed for the quicksort itself, but
+                                // needed for the UI
         console.log("Nope. This partition is a singleton: " + A[left]);
         var leaf = new Leaf();
         leaf.setArray("pre", A.slice(left, left+1), left);
         leaf.setArray("post", A.slice(left, left+1));
         this.addLeaf(leaf);
     }
-    else { console.log("right > left, so we are done!"); } // also unnecessary
+    else { console.log("right > left, so we are done!"); }
 };
 
 BinaryTree.prototype.render = function(divID, divIDjq) {
-    console.log("------------------------------------------");
+    console.log("-----------------------------------------------------");
     console.log("-----------STARTING THE RENDER FUNCTION--------------");
 
     var i = 0;
 
     this.leaves.forEach(function (leaf) {
         $(divIDjq).append(leaf.getHTML());
-        if (qsDemo.cellWidth === null) { qsDemo.cellWidth = leaf.getPivotWidth(); }
+        if (qsDemo.cellWidth === null) {
+            // establish the standard cell width for layout
+            qsDemo.cellWidth = leaf.getPivotWidth();
+        }
     });
 
     var leaf = new Leaf();
@@ -426,17 +367,11 @@ Leaf.prototype.getXpos = function() {
 Leaf.prototype.setDivIDs = function() {
     this.preArray.divID = this.divID + "_pre";
     this.preArray.setDivIDs();
-    this.postArray.divID = this.divID + "_post";
-    this.postArray.setDivIDs();
-};
+    if (this.postArray) {
+        this.postArray.divID = this.divID + "_post";
+        this.postArray.setDivIDs();
+    }
 
-Leaf.prototype.set_H_index = function (i) {
-// Sets the horizontal order of the Leaf in the binaryTree
-// Also sets the divID for the Leaf, as well as its preArray, postArray
-// and their cells.
-    this.hIndex = i;
-    this.divID = "leaf_" + i;
-    this.setDivIDs();
 };
 
 Leaf.prototype.hasChildren = function() {
@@ -503,35 +438,37 @@ Leaf.prototype.setChild = function (child) {
             this.leftChild = child;
             child.binPos = "left";
         }
-        
     }
 };
 
 Leaf.prototype.getHTML = function() {
     var divClass;
+    var html = "";
     console.log("my divID is: " + this.divID);
+
+    if (this.isFinal === false) { // a bit of a hack
+        this.setDivIDs(); // sets div IDs for all child elements
+    }
 
     if (this.isFinal) { divClass = "leaf_final"; }
     else { divClass = "leaf"; }
     
-    this.html =  "<div class='" + divClass + "'";
-    this.html += " id = '" + this.divID + "'";
+    html =  "<div class='" + divClass + "'";
+    html += " id = '" + this.divID + "'";
 
-    this.html += " style = '" + this.getStyle() + "'";
+    html += " style = '" + this.getStyle() + "'";
+    html += ">";
 
-    this.html += ">";
-
-    this.html += this.preArray.getHTML();
+    html += this.preArray.getHTML();
 
     if (this.isSingleton() === false && this.isFinal === false) {
-        this.html += this.postArray.getHTML();
+        html += this.postArray.getHTML();
     }
 
-    this.html += "</div>";
+    html += "</div>";
     
-    console.log("my HTML is: " + this.html);
-    return this.html;
-
+    console.log("my HTML is: " + html);
+    return html;
 };
 
 Leaf.prototype.getStyle = function() {
@@ -548,7 +485,10 @@ Leaf.prototype.getStyle = function() {
     return style;
 };
 
-Leaf.prototype.setIndex = function(index) { this.index = index; };
+Leaf.prototype.setIndex = function(index) {
+    this.index = index;
+    this.divID = "leaf_" + this.index;
+};
 
 Leaf.prototype.setParent = function(parent) { this.parent = parent; };
 
@@ -589,28 +529,23 @@ Leaf.prototype.show = function() {
 
 var Cell = function (value) {
     this.divID = "";
-    this.html = "";
     this.value = value;
     this.isPivot = false;
 };
 
 Cell.prototype.getHTML = function(isSingleton, partitionType) {
     var cssClass = "cell";
-    
+    var html = "";
+
     if (isSingleton) { cssClass = "singleton"; }
     else if (this.isPivot) {
         if (partitionType === "pre") { cssClass = "pivotPre"; }
         else { cssClass = "pivotPost"; }
     }
-    this.html = "<div class='" + cssClass + "' id='" + this.divID + "'>";
-    this.html += this.value;
-    this.html += "</div>";
-    return this.html;
-};
-
-// Probably no longer necessary
-Cell.prototype.getWidth = function() {
-    return document.getElementById(this.divID).offsetWidth;
+    html = "<div class='" + cssClass + "' id='" + this.divID + "'>";
+    html += this.value + "</div>";
+    
+    return html;
 };
 
 /*----------------------------------*/
@@ -628,9 +563,7 @@ var Subarray = function(arrayType, data) {
     }, this);
 };
 
-Subarray.prototype.isSingleton = function() {
-    return (this.data.length === 1);
-};
+Subarray.prototype.isSingleton = function() {return (this.data.length === 1);};
 
 Subarray.prototype.setDivIDs = function() {
     var i = 0;
@@ -654,15 +587,15 @@ Subarray.prototype.setPivotPos = function(pivotVal) {
 };
 
 Subarray.prototype.getHTML = function() {
-    this.html = "<div class = 'array' id = '" + this.divID + "'>";
+    var html = "";
+
+    html = "<div class = 'array' id = '" + this.divID + "'>";
 
     this.cells.forEach(function(cell) {
-        this.html += cell.getHTML(this.isSingleton(), this.type);
+        html += cell.getHTML(this.isSingleton(), this.type);
     }, this);
-    
-    this.html += "</div>";
-    
-    return this.html;
+
+    return (html += "</div>");
 };
 
 Subarray.prototype.getPivotCell = function() {
