@@ -41,8 +41,14 @@
 }
 
 #topnavContainer {
-    width: 100%
+    width: 100%;
+    max-height: 100px;
+    display: table;
 }
+#topnavContainer div {
+    display: table-cell;
+}
+
 .inputVals {
     margin: 1px;
     text-align: center;
