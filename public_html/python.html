@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>tomgsmith99 Quicksort - animation</title>
+        <title>tomgsmith99 Quicksort - illustration</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -11,30 +11,9 @@
         <script src="scripts/jsplumb/jsPlumb-2.0.4.js"></script>
 
         <script src='scripts/tom/binaryTree.js' type ='text/javascript'></script>
-        <script src="scripts/tom/qsUI.js" type="text/javascript"></script>
         <script src="scripts/tom/quicksort.js" type="text/javascript"></script>
         <script src="scripts/tom/qsDemoSet.js" type="text/javascript"></script>
 
-        <script type ="text/javascript">
-
-            var qsDemoSet = new QSDemoSet();
-                qsDemoSet.setCanvasID("quickSortCanvas");
-                qsDemoSet.setFormID("topnavRight");
-
-                qsDemoSet.canvasX = 10;
-                qsDemoSet.canvasY = 120;
-                qsDemoSet.numFields = 10;
-
-            window.onload = function () {
-                // var initialArray = [17, 35, 12, 32, 6, 99, 4, 8, 43, 50];
-                
-                var initialArray = [22,45,35,77,73,52,0,55,77,16];
-                qsDemoSet.run(initialArray);
-                qsDemoSet.renderForm();
-
-            };
-
-        </script>
 <!--            /*
 
             def quickSort(A, left, right): # Accept the array and arbitrary values for left
@@ -83,11 +62,13 @@ quickSort(A, 0, (len(A) - 1))
             <div class="topnav" id="topnavLeft">
                 <p>quicksort illustrator</p>
             </div>
-            <div class="topnav" id="topnavRight">
-                <div class ='topnav' id='searchResults'></div>
 
-            </div>
+            <div class="topnav" id="topnavRight"></div>
         </div>
-        <div id="quickSortCanvas"></div>
+        <div id ='canvas'>
+            <div id="quickSortCanvas"></div>
+            <div id='tableView'></div>
+        </div>
+
     </body>
 </html>
