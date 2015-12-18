@@ -361,7 +361,10 @@ Leaf.prototype.getPivotXpos = function() {
 
 Leaf.prototype.getXpos = function() {
     /* global qsDemo */
-    return (qsDemo.canvasX + (qsDemo.cellWidth * this.origLeft));
+    // return (qsDemo.canvasX + (qsDemo.cellWidth * this.origLeft));
+    
+    return (qsDemo.cellWidth * this.origLeft);
+
 };
 
 Leaf.prototype.setDivIDs = function() {
@@ -473,15 +476,24 @@ Leaf.prototype.getHTML = function() {
 
 Leaf.prototype.getStyle = function() {
     var style;
-    var top;
+    var marginTop;
 
     // Set top value
-    if (this.depth === 0) { top = qsDemo.canvasY; }
-    else { top = qsDemo.canvasY + (this.depth * qsDemo.rowSpace); }
-    style = "top:" + top + "px;";
+//    if (this.depth === 0) { top = qsDemo.canvasY; }
+//    else { top = qsDemo.canvasY + (this.depth * qsDemo.rowSpace); }
+//    style = "top:" + top + "px;";
+    
+//    if (this.depth === 0) { marginTop = qsDemo.canvasY; }
+//    else { marginTop = qsDemo.canvasY + (this.depth * qsDemo.rowSpace); }
+//    style = "margin-top:" + marginTop + "px;";
+
+    if (this.depth === 0) { marginTop = 0; }
+    else { marginTop = (this.depth * 80); }
+    style = "margin-top:" + marginTop + "px;";
+
 
     // Set left value
-    style += "left:" + this.getXpos() + "px;";
+    style += "margin-left:" + this.getXpos() + "px;";
     return style;
 };
 

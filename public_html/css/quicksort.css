@@ -1,7 +1,27 @@
-.leaf, .leaf_final {
-    width: max-content;
-    position: absolute;
+body {
     font-family: verdana, arial, helvetica, sans-serif;
+    text-align: left;
+
+}
+
+#header {
+    margin-bottom: 10px;
+}
+
+#uiControls {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom-style: solid;
+    border-width: 1px;
+}
+
+
+#quickSortCanvas {
+    margin-top: 10px;
+}
+
+.leaf, .leaf_final {
+    position: absolute;
 }
 
 .leaf_final .cell { background-color: DarkSeaGreen;}
@@ -15,7 +35,6 @@
     padding: 2px;
     text-align: center;
     width: 20px;
-
 }
 
 .pivotPre {
@@ -31,44 +50,12 @@
     border-left-style: solid;
     border-bottom-style: solid;
     border-width: 1px;
-    margin-top: 10px;
-}
-
-.topnav {
-    font-family: verdana, arial, helvetica, sans-serif;
-    background-color: Cornsilk;
-    display: inline-block;
-}
-
-#topnavContainer {
-    width: 100%;
-    max-height: 100px;
-    display: table;
-}
-#topnavContainer div {
-    display: table-cell;
+    margin-top: 8px;
 }
 
 .inputVals {
     margin: 1px;
     text-align: center;
-}
-
-#topnavLeft {
-    width: 150px;
-    text-align: center;
-    vertical-align: top;
-    float: left;
-}
-
-#topnavRight {
-    margin-left: 150px;
-    text-align: left;
-
-}
-
-#quickSortCanvas {
-    display: inline-block;
 }
 
 p.form {
