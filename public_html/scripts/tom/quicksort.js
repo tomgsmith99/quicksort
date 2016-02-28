@@ -1,105 +1,85 @@
 
 function quickSort(A, left, right) {
-    var pivot;
 
     qsCount = qsCount + 1;
     
     if (qsCount > 100) { throw new Error("too many qs loops"); }
-    console.log("----------QSBEGIN----------");
-    console.log("Starting the qs function.");
-    console.log("Iteration number: " + qsCount);
+    console.log("----------Quicksort Begin----------");
+    console.log("Starting the quicksort function.");
+    console.log("The array currently looks like this: " + A);
+    console.log("Instance number: " + qsCount);
     console.log("The left index is: " + left);
     console.log("The right index is: " + right);
-    console.log("Checking to see if left index < right index:");
+    console.log("Checking to see if left index < right index...");
 
-    if (left <= right) {
-        console.log("left is < right.");
+    if (left < right) {
+        console.log("left < right.");
         console.log("starting the partition function.");
-        pivot = partition(A, left, right);
+        var pivot = partition(A, left, right);
         console.log("partition function complete.");
-        console.log("result of partition function - pivot index is: " + pivot);
+        console.log("pivot index is: " + pivot);
+        console.log("the array currently looks like this: " + A);
+        
         quickSort (A, left, (pivot-1));
         quickSort (A, (pivot+1), right);
     }
     else if (left === right) { // Note: this clause is not needed for qs!
         console.log("Nope. This partition is a singleton: " + A[left]);
-        var leaf = new Leaf();
-        leaf.setArray("pre", A.slice(left, left+1));
-        leaf.setArray("post", A.slice(left, left+1));
-        binaryTree.addLeaf(leaf);
     }
-    else { console.log("right > left, so we are done!"); } // also unnecessary
+    else {  // also unnecessary
+        console.log("right > left, so we are done with this instance of the qs function.");
+    }
 }
 
 function partition(A, left, right){
-    var pivot = A[left];
-    var i = left;
-    var j;
-    var temp;
+    var pivotVal = A[left];
+    var pivptr = left;
 
-    // Store the subarray in the binary tree
-    // this procedure is not necessary for quicksort
-    var leaf = new Leaf();
-    binaryTree.addLeaf(leaf);
-    leaf.setArray("pre", A.slice(left, (right + 1)));
-
-    console.log("--------PBEGIN------------");
+    console.log("--------Partition Begin------------");
     console.log("This is the partition we are going to work on:");
 
     printSubArray(A, left, right);
 
-    for (j = left; j <= right; j++){
-        console.log("beginning state, at top of loop: ");
+    for (var j = (left + 1); j <= right; j++){
+        console.log("state of partition at top of loop iteration:");
         printSubArray(A, left, right);
 
         console.log("The index of j is: " + j);
-        console.log("The index of i is: " + i);
-        console.log("Comparing A[" + j + "] (" + A[j] + ") to the pivot value: " + pivot);
+        console.log("The index of the pivot pointer is: " + pivptr);
+        console.log("Comparing A[" + j + "] (" + A[j] + ") to the pivot value: " + pivotVal);
 
-        if (A[j] <= pivot) {
-            console.log("A[j] is less than or equal to the pivot, so we are going to swap A[j] " + A[j] + " with A[i]: " + A[i]);
+        if (A[j] <= pivotVal) {
+            pivptr = pivptr + 1;
 
-            temp = A[j];
-            A[j] = A[i];
-            A[i] = temp;
+            console.log("A[j] is less than or equal to the pivot, so we are going to swap A[j] " + A[j] + " with A[pivptr]: " + A[pivptr]);
 
-            console.log("end state, at bottom of loop:");
+            var temp = A[j];
+            A[j] = A[pivptr];
+            A[pivptr] = temp;
+
+            console.log("state of partition at the bottom of the loop iteration:");
             printSubArray(A, left, right);
-
-            i = i + 1;
         }
         else { 
             console.log("A[j] is greater than the pivot value, so no values were swapped.");
-            console.log("A[j] is: " + A[j] + " and the pivot is: " + pivot);
-            console.log("The type of A[j] is: " + typeof(A[j]) + " and the type of pivot is: " + typeof(pivot));
-
-
+            console.log("A[j] is: " + A[j] + " and the pivot is: " + pivotVal);
         }
 
-        console.log("i is now: " + i);
+        console.log("pivptr is now: " + pivptr);
         console.log("-----------------");
     }
 
-    console.log("For loop complete. Swapping the A[i-1] value " + A[i-1] + " with the pivot " + A[left]);
+    console.log("For loop complete. Swapping the A[pivptr] value " + A[pivptr] + " with the pivot " + A[left]);
 
-    temp = A[i -1];
-    A[i - 1] = A[left];
+    temp = A[pivptr];
+    A[pivptr] = A[left];
     A[left] = temp;
 
     console.log("This partition is now:");
 
     printSubArray(A, left, right);
 
-    // Store the subarray in the binary tree
-    // this procedure is not necessary for quicksort
-    leaf.setArray("post", A.slice(left, (right + 1)));
-
-    console.log("The full array is now: " + A.join(' '));
-
-    console.log("The length of the list of arrays is now: " + binaryTree.getTotal());
-
-    retVal = i - 1;
-    return retVal;
+    return pivptr;
 }
 
 function printSubArray(A, l, r) { console.log(A.slice(l, r+1)); }

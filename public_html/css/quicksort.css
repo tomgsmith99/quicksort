@@ -1,7 +1,6 @@
 body {
     font-family: verdana, arial, helvetica, sans-serif;
     text-align: left;
-
 }
 
 #header {
@@ -9,15 +8,21 @@ body {
 }
 
 #uiControls {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom-style: solid;
+    width: 150px;
+    padding-right: 5px;
+/*    margin-bottom: 10px;*/
+/*    padding-bottom: 10px;*/
+/*    border-bottom-style: solid;*/
+    border-right-style: solid;
+
     border-width: 1px;
+    float: left;
 }
 
 
 #quickSortCanvas {
-    margin-top: 10px;
+/*    margin-top: 10px;*/
+    margin-left: 160px;
 }
 
 .leaf, .leaf_final {
@@ -64,7 +69,9 @@ body {
 p.form {
     margin: 3px;
     font-family: verdana, arial, helvetica, sans-serif;
-    font-size: 75%
+    font-size: 75%;
+    text-align: center;
+    margin-bottom: 10px;
 
 }
 
