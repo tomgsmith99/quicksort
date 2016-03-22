@@ -15,14 +15,22 @@ QSDemo.prototype.render = function (btree) {
 };
 
 QSDemo.prototype.renderForm = function (n) {
-    var thisform = "<form id='qsArray'></form>";
-
+    var thisform = "";
+    
     thisform += "<p class ='form'>";
     thisform += "<button type = 'button' id = 'runButton' onclick='run()'>run</button>";
+    thisform += "</p>";
+    thisform += "<p class ='form'>";
     thisform += "<button type = 'button' id = 'randButton' onclick='randomize()'>randomize</button>";
-    thisform += "Number of fields: <input type = 'text' size = '2' id = 'numFields'>";
+    thisform += "</p>";
+    thisform += "<p class ='form'>";
+    thisform += "n: <input type = 'text' size = '2' id = 'numFields'>";
+    thisform += "</p>";
+    thisform += "<p class ='form'>";
     thisform += "<button type = 'button' id = 'numButton' onclick='updateFields()'>update</button>";
     thisform += "</p>";
+
+    thisform += "<form id='qsArray'></form>";
 
     $(this.formDivIDjq).append(thisform);
     updateFields(this.trees[0].inputArray);
